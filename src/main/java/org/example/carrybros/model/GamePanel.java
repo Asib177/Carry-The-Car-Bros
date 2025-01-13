@@ -11,6 +11,10 @@ public class GamePanel extends Canvas {
 
     // Screen settings
     public final int tileSize = 48; // 48x48 tiles
+<<<<<<< HEAD
+=======
+
+>>>>>>> asib
     public final int maxScreenCol = 20;
     public final int maxScreenRow = 12;
     public final int screenWidth = tileSize * maxScreenCol; // 960 pixels
@@ -22,6 +26,12 @@ public class GamePanel extends Canvas {
     public final int worldWidth = tileSize * maxWorldCol;
     public final int worldHeight = tileSize * maxWorldRow;
 
+<<<<<<< HEAD
+=======
+    // FPS
+    //int FPS = 60;
+
+>>>>>>> asib
     // Game Components
     public TileManager tileM = new TileManager(this);
     public KeyHandler keyH = new KeyHandler();
@@ -39,6 +49,22 @@ public class GamePanel extends Canvas {
         startGameThread();
     }
 
+<<<<<<< HEAD
+=======
+    // Getters for world dimensions and tile size
+    public int getMaxWorldCol() {
+        return maxWorldCol;
+    }
+
+    public int getMaxWorldRow() {
+        return maxWorldRow;
+    }
+
+    public int getTileSize() {
+        return tileSize;
+    }
+
+>>>>>>> asib
     public void startGameThread() {
         gameLoop = new AnimationTimer() {
             @Override
@@ -52,6 +78,10 @@ public class GamePanel extends Canvas {
 
     public void update() {
         player.update();
+<<<<<<< HEAD
+=======
+        tileM.updateCar();
+>>>>>>> asib
     }
 
     public void draw() {
@@ -61,6 +91,10 @@ public class GamePanel extends Canvas {
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, screenWidth, screenHeight);
 
+<<<<<<< HEAD
+=======
+        // Draw tiles, player, etc.
+>>>>>>> asib
         tileM.draw(gc);
         player.draw(gc);
     }

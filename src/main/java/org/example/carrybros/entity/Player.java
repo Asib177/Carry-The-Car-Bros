@@ -19,6 +19,10 @@ public class Player extends Entity {
         this.gp = gp;
         this.keyH = keyH;
 
+<<<<<<< HEAD
+=======
+        // Set Player in the middle of maps
+>>>>>>> asib
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
@@ -53,16 +57,51 @@ public class Player extends Entity {
     public void update() {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
 
+<<<<<<< HEAD
 
             collisionOn = false;
             gp.cChecker.checkTile(this);
 
             if (!collisionOn) {
+=======
+            if (keyH.upPressed) {
+                direction = "up";
+            } else if (keyH.downPressed) {
+                direction = "down";
+            } else if (keyH.leftPressed) {
+                direction = "left";
+            } else if (keyH.rightPressed) {
+                direction = "right";
+            }
+
+            // CHECK TILE COLLISION
+            collisionOn = false;
+            gp.cChecker.checkTile(this);
+
+            // If collision is false, player can move
+            if (!collisionOn) {
+                if (direction.equals("up")) {
+                    worldY -= speed;
+                } else if (direction.equals("down")) {
+                    worldY += speed;
+                } else if (direction.equals("left")) {
+                    worldX -= speed;
+                } else if (direction.equals("right")) {
+                    worldX += speed;
+>>>>>>> asib
                 }
             }
 
             spriteCounter++;
             if (spriteCounter > 12) {
+<<<<<<< HEAD
+=======
+                if (spriteNum == 1) {
+                    spriteNum = 2;
+                } else {
+                    spriteNum = 1;
+                }
+>>>>>>> asib
                 spriteCounter = 0;
             }
         }
@@ -72,6 +111,33 @@ public class Player extends Entity {
         // Draw the player
         Image playerImage = null;
 
+<<<<<<< HEAD
+=======
+        if (direction.equals("up")) {
+            if (spriteNum == 1) {
+                playerImage = up1;
+            } else {
+                playerImage = up2;
+            }
+        } else if (direction.equals("down")) {
+            if (spriteNum == 1) {
+                playerImage = down1;
+            } else {
+                playerImage = down2;
+            }
+        } else if (direction.equals("left")) {
+            if (spriteNum == 1) {
+                playerImage = left1;
+            } else {
+                playerImage = left2;
+            }
+        } else if (direction.equals("right")) {
+            if (spriteNum == 1) {
+                playerImage = right1;
+            } else {
+                playerImage = right2;
+            }
+>>>>>>> asib
         }
 
         if (playerImage != null) {
