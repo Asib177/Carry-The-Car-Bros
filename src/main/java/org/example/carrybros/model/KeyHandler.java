@@ -1,27 +1,27 @@
 package org.example.carrybros.model;
 
-import javafx.scene.input.KeyCode;
+import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 
-public class KeyHandler {
+public class KeyHandler implements EventHandler<KeyEvent> {
+    public boolean upPressed, downPressed, leftPressed, rightPressed;
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, shootPressed;
-
-    public void keyPressed(KeyEvent event) {
-        KeyCode code = event.getCode();
-
-        if (code == KeyCode.W) upPressed = true;
-        if (code == KeyCode.S) downPressed = true;
-        if (code == KeyCode.A) leftPressed = true;
-        if (code == KeyCode.D) rightPressed = true;
-    }
-
-    public void keyReleased(KeyEvent event) {
-        KeyCode code = event.getCode();
-
-        if (code == KeyCode.W) upPressed = false;
-        if (code == KeyCode.S) downPressed = false;
-        if (code == KeyCode.A) leftPressed = false;
-        if (code == KeyCode.D) rightPressed = false;
+    @Override
+    public void handle(KeyEvent event) {
+        if (event.getEventType() == KeyEvent.KEY_PRESSED) {
+            switch (event.getCode()) {
+                case W -> upPressed = true;
+                case S -> downPressed = true;
+                case A -> leftPressed = true;
+                case D -> rightPressed = true;
+            }
+        } else if (event.getEventType() == KeyEvent.KEY_RELEASED) {
+            switch (event.getCode()) {
+                case W -> upPressed = false;
+                case S -> downPressed = false;
+                case A -> leftPressed = false;
+                case D -> rightPressed = false;
+            }
+        }
     }
 }

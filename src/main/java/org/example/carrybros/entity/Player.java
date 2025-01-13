@@ -19,7 +19,7 @@ public class Player extends Entity {
         this.gp = gp;
         this.keyH = keyH;
 
-        // Set Player in the middle of maps
+        // Set Player in the middle of screen
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
@@ -32,8 +32,8 @@ public class Player extends Entity {
     public void setDefaultValues() {
         startTime = System.currentTimeMillis();
 
-        worldX = gp.tileSize * 1;
-        worldY = gp.tileSize * 9;
+        worldX = gp.tileSize * 5; // Start at some location
+        worldY = gp.tileSize * 5;
 
         speed = 2; // Player speed
         direction = "down"; // Initial direction
@@ -51,78 +51,58 @@ public class Player extends Entity {
         right2 = new Image(getClass().getResourceAsStream("/player/boy_right_2.png"));
     }
 
-    public void update() {
+    public void update(double deltaTime) {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
 
             if (keyH.upPressed) {
                 direction = "up";
+                worldY -= speed * deltaTime;
             } else if (keyH.downPressed) {
                 direction = "down";
+                worldY += speed * deltaTime;
             } else if (keyH.leftPressed) {
                 direction = "left";
+                worldX -= speed * deltaTime;
             } else if (keyH.rightPressed) {
                 direction = "right";
+                worldX += speed * deltaTime;
             }
 
-            // CHECK TILE COLLISION
+            // Check collision
             collisionOn = false;
             gp.cChecker.checkTile(this);
 
-            // If collision is false, player can move
+            // If no collision, update player position
             if (!collisionOn) {
-                if (direction.equals("up")) {
-                    worldY -= speed;
-                } else if (direction.equals("down")) {
-                    worldY += speed;
-                } else if (direction.equals("left")) {
-                    worldX -= speed;
-                } else if (direction.equals("right")) {
-                    worldX += speed;
+                switch (direction) {
+                    case "up" -> worldY -= speed;
+                    case "down" -> worldY += speed;
+                    case "left" -> worldX -= speed;
+                    case "right" -> worldX += speed;
                 }
             }
 
+            // Sprite animation logic
             spriteCounter++;
             if (spriteCounter > 12) {
-                if (spriteNum == 1) {
-                    spriteNum = 2;
-                } else {
-                    spriteNum = 1;
-                }
+                spriteNum = (spriteNum == 1) ? 2 : 1;
                 spriteCounter = 0;
             }
         }
     }
 
     public void draw(GraphicsContext gc) {
-        // Draw the player
         Image playerImage = null;
 
-        if (direction.equals("up")) {
-            if (spriteNum == 1) {
-                playerImage = up1;
-            } else {
-                playerImage = up2;
-            }
-        } else if (direction.equals("down")) {
-            if (spriteNum == 1) {
-                playerImage = down1;
-            } else {
-                playerImage = down2;
-            }
-        } else if (direction.equals("left")) {
-            if (spriteNum == 1) {
-                playerImage = left1;
-            } else {
-                playerImage = left2;
-            }
-        } else if (direction.equals("right")) {
-            if (spriteNum == 1) {
-                playerImage = right1;
-            } else {
-                playerImage = right2;
-            }
+        // Choose sprite image based on direction
+        switch (direction) {
+            case "up" -> playerImage = spriteNum == 1 ? up1 : up2;
+            case "down" -> playerImage = spriteNum == 1 ? down1 : down2;
+            case "left" -> playerImage = spriteNum == 1 ? left1 : left2;
+            case "right" -> playerImage = spriteNum == 1 ? right1 : right2;
         }
 
+        // Draw the player
         if (playerImage != null) {
             gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
         }

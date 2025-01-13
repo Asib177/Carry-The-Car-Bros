@@ -149,6 +149,12 @@ public class TileManager {
             e.printStackTrace();
             throw new RuntimeException("Error reading the map file.", e);
         }
+//        for (int row = 0; row < gp.getMaxWorldRow(); row++) {
+//            for (int col = 0; col < gp.getMaxWorldCol(); col++) {
+//                System.out.print(mapTileNum[col][row] + " ");
+//            }
+//            System.out.println();
+//        }
     }
 
     public boolean isPlayerNearCar() {
@@ -196,6 +202,27 @@ public class TileManager {
         }
     }
 
+    public void cameraDraw(GraphicsContext gc) {
+        for (int worldRow = 0; worldRow < gp.getMaxWorldRow(); worldRow++) {
+            for (int worldCol = 0; worldCol < gp.getMaxWorldCol(); worldCol++) {
+                int tileNum = mapTileNum[worldCol][worldRow];
+
+                int worldX = worldCol * gp.getTileSize();
+                int worldY = worldRow * gp.getTileSize();
+
+                // Calculate the screen position based on the camera
+                int screenX = worldX - gp.cameraX;
+                int screenY = worldY - gp.cameraY;
+
+                // Draw only tiles that are visible on the screen
+                if (screenX + gp.getTileSize() > 0 && screenX < gp.screenWidth &&
+                        screenY + gp.getTileSize() > 0 && screenY < gp.screenHeight) {
+                    gc.drawImage(tile[tileNum].image, screenX, screenY, gp.getTileSize(), gp.getTileSize());
+                }
+            }
+        }
+    }
+
     public void draw(GraphicsContext gc) {
         for (int worldRow = 0; worldRow < gp.getMaxWorldRow(); worldRow++) {
             for (int worldCol = 0; worldCol < gp.getMaxWorldCol(); worldCol++) {
@@ -205,6 +232,8 @@ public class TileManager {
                 gc.drawImage(tile[tileNum].image, worldX, worldY, gp.getTileSize(), gp.getTileSize());
             }
         }
+
+        cameraDraw(gc);
 
         // Draw the car
         if (carDirection.equals("UP")) {
