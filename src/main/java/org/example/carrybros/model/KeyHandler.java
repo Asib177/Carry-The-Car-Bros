@@ -5,7 +5,6 @@ import javafx.scene.input.KeyEvent;
 
 public class KeyHandler {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed;
 
     public void keyPressed(KeyEvent event) {
         KeyCode code = event.getCode();

@@ -61,7 +61,6 @@ public class GamePanel extends Canvas {
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, screenWidth, screenHeight);
 
-        // Draw tiles and player
         tileM.draw(gc);
         player.draw(gc);
     }
