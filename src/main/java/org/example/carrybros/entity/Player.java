@@ -19,10 +19,7 @@ public class Player extends Entity {
         this.gp = gp;
         this.keyH = keyH;
 
-<<<<<<< HEAD
-=======
         // Set Player in the middle of maps
->>>>>>> asib
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
@@ -57,13 +54,6 @@ public class Player extends Entity {
     public void update() {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
 
-<<<<<<< HEAD
-
-            collisionOn = false;
-            gp.cChecker.checkTile(this);
-
-            if (!collisionOn) {
-=======
             if (keyH.upPressed) {
                 direction = "up";
             } else if (keyH.downPressed) {
@@ -88,20 +78,16 @@ public class Player extends Entity {
                     worldX -= speed;
                 } else if (direction.equals("right")) {
                     worldX += speed;
->>>>>>> asib
                 }
             }
 
             spriteCounter++;
             if (spriteCounter > 12) {
-<<<<<<< HEAD
-=======
                 if (spriteNum == 1) {
                     spriteNum = 2;
                 } else {
                     spriteNum = 1;
                 }
->>>>>>> asib
                 spriteCounter = 0;
             }
         }
@@ -111,8 +97,6 @@ public class Player extends Entity {
         // Draw the player
         Image playerImage = null;
 
-<<<<<<< HEAD
-=======
         if (direction.equals("up")) {
             if (spriteNum == 1) {
                 playerImage = up1;
@@ -137,7 +121,6 @@ public class Player extends Entity {
             } else {
                 playerImage = right2;
             }
->>>>>>> asib
         }
 
         if (playerImage != null) {
