@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.carrybros.frontendByMuktadir.Options">
+   <children>
+      <Pane prefHeight="596.0" prefWidth="754.0">
+         <children>
+            <Label layoutX="186.0" layoutY="52.0" prefHeight="95.0" prefWidth="381.0" text="Carry The Car" textAlignment="CENTER" textFill="#514b4b">
+               <font>
+                  <Font name="Baskerville Old Face" size="64.0" />
+               </font>
+            </Label>
+            <Button layoutX="292.0" layoutY="262.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="170.0" text="Play">
+               <font>
+                  <Font name="Agency FB" size="18.0" />
+               </font>
+            </Button>
+            <Button layoutX="292.0" layoutY="314.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="170.0" text="High Score">
+               <font>
+                  <Font name="Agency FB" size="18.0" />
+               </font>
+            </Button>
+            <Button layoutX="292.0" layoutY="364.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="170.0" text="Controls">
+               <font>
+                  <Font name="Agency FB" size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="$CONTROLLER_NAME$">
+   <children>
+      <Pane layoutX="2.0" prefHeight="596.0" prefWidth="754.0">
+         <children>
+            <Label layoutX="186.0" layoutY="52.0" prefHeight="95.0" prefWidth="381.0" text="Carry The Car" textAlignment="CENTER" textFill="#514b4b">
+               <font>
+                  <Font name="Baskerville Old Face" size="64.0" />
+               </font>
+            </Label>
+            <Label layoutX="271.0" layoutY="226.0" prefHeight="38.0" prefWidth="51.0" text="Up" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="432.0" layoutY="226.0" prefHeight="38.0" prefWidth="51.0" text="W" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="351.0" layoutY="226.0" prefHeight="38.0" prefWidth="51.0" text=": -" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="271.0" layoutY="271.0" prefHeight="38.0" prefWidth="51.0" text="Down" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="432.0" layoutY="271.0" prefHeight="38.0" prefWidth="51.0" text="S" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="351.0" layoutY="271.0" prefHeight="38.0" prefWidth="51.0" text=": -" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="271.0" layoutY="317.0" prefHeight="38.0" prefWidth="51.0" text="Left" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="432.0" layoutY="317.0" prefHeight="38.0" prefWidth="51.0" text="A" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="351.0" layoutY="317.0" prefHeight="38.0" prefWidth="51.0" text=": -" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="271.0" layoutY="367.0" prefHeight="38.0" prefWidth="51.0" text="Right" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="432.0" layoutY="367.0" prefHeight="38.0" prefWidth="51.0" text="D" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="351.0" layoutY="367.0" prefHeight="38.0" prefWidth="51.0" text=": -" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="271.0" layoutY="420.0" prefHeight="38.0" prefWidth="51.0" text="Fire" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="432.0" layoutY="420.0" prefHeight="38.0" prefWidth="51.0" text="F" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="351.0" layoutY="420.0" prefHeight="38.0" prefWidth="51.0" text=": -" textAlignment="CENTER">
+               <font>
+                  <Font name="Agency FB Bold" size="25.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
