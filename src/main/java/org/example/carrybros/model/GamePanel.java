@@ -15,14 +15,13 @@ public class GamePanel extends Canvas {
     public final int maxScreenCol = 20;
     public final int maxScreenRow = 12;
     // World Map Settings
-    //public final int maxWorldCol = 23;
-    //public final int maxWorldRow = 20;
+//    public final int maxWorldCol = 23;
+//    public final int maxWorldRow = 20;
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
 
     public int screenWidth = tileSize * maxScreenCol; // 960 pixels
     public int screenHeight = tileSize * maxScreenRow; // 576 pixels
-
 
     public final int worldWidth = tileSize * maxWorldCol;
     public final int worldHeight = tileSize * maxWorldRow;
@@ -35,8 +34,6 @@ public class GamePanel extends Canvas {
     public KeyHandler keyH = new KeyHandler();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyH);
-
-    private AnimationTimer gameLoop;
 
     public GamePanel() {
 //        super(768, 576); // Set the canvas size to screen width and height

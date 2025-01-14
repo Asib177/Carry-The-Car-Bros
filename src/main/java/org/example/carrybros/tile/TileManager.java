@@ -32,7 +32,8 @@ public class TileManager {
 
 //        loadMap("/map/myMap01.txt");
         //loadMap("/map/world01.txt");testingMap
-        loadMap("/map/testingMap.txt");
+        //loadMap("/map/testingMap.txt");
+        loadMap("/map/myMap02.txt");
         getTileImage();
         initializeCar();
         loadCarImages();
@@ -226,26 +227,50 @@ public class TileManager {
     }
 
     public void draw(GraphicsContext gc) {
+
+        cameraDraw(gc);
+
         for (int worldRow = 0; worldRow < gp.getMaxWorldRow(); worldRow++) {
             for (int worldCol = 0; worldCol < gp.getMaxWorldCol(); worldCol++) {
                 int tileNum = mapTileNum[worldCol][worldRow];
                 int worldX = worldCol * gp.getTileSize();
                 int worldY = worldRow * gp.getTileSize();
-                gc.drawImage(tile[tileNum].image, worldX, worldY, gp.getTileSize(), gp.getTileSize());
+                int screenX = worldX - gp.cameraX;
+                int screenY = worldY - gp.cameraY;
+
+                // Only draw tiles visible on screen
+                if (screenX + gp.getTileSize() > 0 && screenX < gp.screenWidth &&
+                        screenY + gp.getTileSize() > 0 && screenY < gp.screenHeight) {
+                    gc.drawImage(tile[tileNum].image, screenX, screenY, gp.getTileSize(), gp.getTileSize());
+                }
             }
         }
 
-        cameraDraw(gc);
+        // Draw the car radius as a circle
+        gc.setGlobalAlpha(0.3); // Make the circle semi-transparent
+        gc.setFill(javafx.scene.paint.Color.RED);
+        gc.fillOval(
+                carX - gp.cameraX - carRadius, // X-coordinate (adjusted for the camera and radius)
+                carY - gp.cameraY - carRadius, // Y-coordinate (adjusted for the camera and radius)
+                carRadius * 2,                 // Circle width (diameter)
+                carRadius * 2                  // Circle height (diameter)
+        );
+        gc.setGlobalAlpha(1.0); // Reset transparency to default
+
+
 
         // Draw the car
-        if (carDirection.equals("UP")) {
-            gc.drawImage(carUp, carX - 32, carY - 32);
-        } else if (carDirection.equals("DOWN")) {
-            gc.drawImage(carDown, carX - 32, carY - 32);
-        } else if (carDirection.equals("LEFT")) {
-            gc.drawImage(carLeft, carX - 32, carY - 32);
-        } else if (carDirection.equals("RIGHT")) {
-            gc.drawImage(carRight, carX - 32, carY - 32);
+        Image carImage = switch (carDirection) {
+            case "UP" -> carUp;
+            case "DOWN" -> carDown;
+            case "LEFT" -> carLeft;
+            case "RIGHT" -> carRight;
+            default -> null;
+        };
+
+        if (carImage != null) {
+            int carSize = gp.getTileSize();
+            gc.drawImage(carImage, carX - gp.cameraX - carSize / 2, carY - gp.cameraY - carSize / 2, carSize, carSize);
         }
     }
 }
