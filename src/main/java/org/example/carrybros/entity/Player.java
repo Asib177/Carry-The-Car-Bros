@@ -56,17 +56,21 @@ public class Player extends Entity {
 
             if (keyH.upPressed) {
                 direction = "up";
-                worldY -= speed * deltaTime;
+                worldY -= speed;
             } else if (keyH.downPressed) {
                 direction = "down";
-                worldY += speed * deltaTime;
+                worldY += speed;
             } else if (keyH.leftPressed) {
                 direction = "left";
-                worldX -= speed * deltaTime;
+                worldX -= speed;
             } else if (keyH.rightPressed) {
                 direction = "right";
-                worldX += speed * deltaTime;
+                worldX += speed;
             }
+
+            // Prevent the player from moving outside the world boundaries
+            worldX = Math.max(0, Math.min(worldX, gp.worldWidth - gp.tileSize));
+            worldY = Math.max(0, Math.min(worldY, gp.worldHeight - gp.tileSize));
 
             // Check collision
             collisionOn = false;
@@ -102,9 +106,9 @@ public class Player extends Entity {
             case "right" -> playerImage = spriteNum == 1 ? right1 : right2;
         }
 
-        // Draw the player
+        // Draw the player relative to the camera
         if (playerImage != null) {
-            gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
+            gc.drawImage(playerImage, worldX - gp.cameraX, worldY - gp.cameraY, gp.tileSize, gp.tileSize);
         }
     }
 }

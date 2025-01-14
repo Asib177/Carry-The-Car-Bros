@@ -96,8 +96,8 @@ public class GamePanel extends Canvas {
 
     public void updateCamera() {
         // Center the camera on the player
-        cameraX = player.worldX - screenWidth / 2;
-        cameraY = player.worldY - screenHeight / 2;
+        cameraX = player.worldX - player.screenX / 2;
+        cameraY = player.worldY - player.screenY / 2;
 
         // Ensure the camera stays within the world boundaries
         cameraX = Math.max(0, Math.min(cameraX, worldWidth - screenWidth));
