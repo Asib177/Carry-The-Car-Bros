@@ -2,6 +2,7 @@ package org.example.carrybros.tile;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import org.example.carrybros.model.GamePanel;
 
 import java.io.BufferedReader;
@@ -246,18 +247,25 @@ public class TileManager {
             }
         }
 
-        // Draw the car radius as a circle
-        gc.setGlobalAlpha(0.3); // Make the circle semi-transparent
-        gc.setFill(javafx.scene.paint.Color.RED);
-        gc.fillOval(
-                carX - gp.cameraX - carRadius, // X-coordinate (adjusted for the camera and radius)
-                carY - gp.cameraY - carRadius, // Y-coordinate (adjusted for the camera and radius)
-                carRadius * 2,                 // Circle width (diameter)
-                carRadius * 2                  // Circle height (diameter)
+//        // Draw the car radius as a circle
+//        gc.setGlobalAlpha(0.3); // Make the circle semi-transparent
+//        gc.setFill(javafx.scene.paint.Color.RED);
+//        gc.fillOval(
+//                carX - gp.cameraX - carRadius, // X-coordinate (adjusted for the camera and radius)
+//                carY - gp.cameraY - carRadius, // Y-coordinate (adjusted for the camera and radius)
+//                carRadius * 2,                 // Circle width (diameter)
+//                carRadius * 2                  // Circle height (diameter)
+//        );
+//        gc.setGlobalAlpha(1.0); // Reset transparency to default
+
+        gc.setStroke(Color.GREEN);
+        gc.setLineWidth(2); // Set the thickness of the outline
+        gc.strokeOval(
+                carX - gp.cameraX - carRadius,
+                carY - gp.cameraY - carRadius,
+                carRadius * 2,
+                carRadius * 2
         );
-        gc.setGlobalAlpha(1.0); // Reset transparency to default
-
-
 
         // Draw the car
         Image carImage = switch (carDirection) {

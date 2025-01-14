@@ -23,6 +23,8 @@ public class CollisionChecker {
 
         int tileNum1, tileNum2;
 
+        entity.collisionOn = false; // Reset collision state before checking
+
         switch (entity.direction) {
             case "up" -> {
                 entityTopRow = (entityTopWorldY - entity.speed) / gp.tileSize;
@@ -58,4 +60,5 @@ public class CollisionChecker {
             }
         }
     }
+
 }

@@ -54,37 +54,39 @@ public class Player extends Entity {
     public void update(double deltaTime) {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
 
+            // Initially assume no collision
+            collisionOn = false;
+
+            // Check for collision in the direction the player is attempting to move
             if (keyH.upPressed) {
                 direction = "up";
-                worldY -= speed;
+                gp.cChecker.checkTile(this);  // Check for collision upwards
+                if (!collisionOn) {
+                    worldY -= speed;  // Move up if no collision
+                }
             } else if (keyH.downPressed) {
                 direction = "down";
-                worldY += speed;
+                gp.cChecker.checkTile(this);  // Check for collision downwards
+                if (!collisionOn) {
+                    worldY += speed;  // Move down if no collision
+                }
             } else if (keyH.leftPressed) {
                 direction = "left";
-                worldX -= speed;
+                gp.cChecker.checkTile(this);  // Check for collision to the left
+                if (!collisionOn) {
+                    worldX -= speed;  // Move left if no collision
+                }
             } else if (keyH.rightPressed) {
                 direction = "right";
-                worldX += speed;
+                gp.cChecker.checkTile(this);  // Check for collision to the right
+                if (!collisionOn) {
+                    worldX += speed;  // Move right if no collision
+                }
             }
 
             // Prevent the player from moving outside the world boundaries
             worldX = Math.max(0, Math.min(worldX, gp.worldWidth - gp.tileSize));
             worldY = Math.max(0, Math.min(worldY, gp.worldHeight - gp.tileSize));
-
-            // Check collision
-            collisionOn = false;
-            gp.cChecker.checkTile(this);
-
-            // If no collision, update player position
-            if (!collisionOn) {
-                switch (direction) {
-                    case "up" -> worldY -= speed;
-                    case "down" -> worldY += speed;
-                    case "left" -> worldX -= speed;
-                    case "right" -> worldX += speed;
-                }
-            }
 
             // Sprite animation logic
             spriteCounter++;
@@ -94,6 +96,7 @@ public class Player extends Entity {
             }
         }
     }
+
 
     public void draw(GraphicsContext gc) {
         Image playerImage = null;
