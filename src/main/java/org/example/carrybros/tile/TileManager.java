@@ -30,7 +30,9 @@ public class TileManager {
 
         mapTileNum = new int[gp.getMaxWorldCol()][gp.getMaxWorldRow()];
 
-        loadMap("/map/myMap01.txt");
+//        loadMap("/map/myMap01.txt");
+        //loadMap("/map/world01.txt");testingMap
+        loadMap("/map/testingMap.txt");
         getTileImage();
         initializeCar();
         loadCarImages();

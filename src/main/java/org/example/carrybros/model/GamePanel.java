@@ -12,14 +12,16 @@ public class GamePanel extends Canvas {
     // Screen settings
     public final int tileSize = 48; // 48x48 tiles
 
-        public final int maxScreenCol = 20;
-        public final int maxScreenRow = 12;
+    public final int maxScreenCol = 20;
+    public final int maxScreenRow = 12;
     // World Map Settings
-    public final int maxWorldCol = 23;
-    public final int maxWorldRow = 20;
+    //public final int maxWorldCol = 23;
+    //public final int maxWorldRow = 20;
+    public final int maxWorldCol = 50;
+    public final int maxWorldRow = 50;
 
-    public final int screenWidth = tileSize * maxScreenCol; // 960 pixels
-    public final int screenHeight = tileSize * maxScreenRow; // 576 pixels
+    public int screenWidth = tileSize * maxScreenCol; // 960 pixels
+    public int screenHeight = tileSize * maxScreenRow; // 576 pixels
 
 
     public final int worldWidth = tileSize * maxWorldCol;
@@ -27,9 +29,6 @@ public class GamePanel extends Canvas {
 
     public int cameraX = 0;
     public int cameraY = 0;
-
-    // FPS
-    //int FPS = 60;
 
     // Game Components
     public TileManager tileM = new TileManager(this);
@@ -40,7 +39,15 @@ public class GamePanel extends Canvas {
     private AnimationTimer gameLoop;
 
     public GamePanel() {
-        super(768, 576); // Set the canvas size to screen width and height
+//        super(768, 576); // Set the canvas size to screen width and height
+        // Use default Canvas constructor
+        super();
+
+        // Set canvas size explicitly
+        this.setWidth(screenWidth);
+        this.setHeight(screenHeight);
+
+        // Enable keyboard focus
         this.setFocusTraversable(true);
         this.setOnKeyPressed(keyH::handle);
         this.setOnKeyReleased(keyH::handle);
@@ -107,5 +114,14 @@ public class GamePanel extends Canvas {
         // Draw tiles, player, etc.
         tileM.draw(gc);
         player.draw(gc);
+    }
+
+    // Method to resize the canvas
+    public void resizeCanvas(double newWidth, double newHeight) {
+        screenWidth = (int) newWidth;
+        screenHeight = (int) newHeight;
+
+        this.setWidth(newWidth);
+        this.setHeight(newHeight);
     }
 }

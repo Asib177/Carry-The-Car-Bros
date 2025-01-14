@@ -1,9 +1,9 @@
 package org.example.carrybros.model;
 
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 
@@ -17,8 +17,8 @@ public class Main extends Application {
         // Create the GamePanel
         GamePanel gamePanel = new GamePanel();
 
-        // Wrap the GamePanel in a StackPane (or any Parent subclass)
-        StackPane root = new StackPane(gamePanel);
+        // Use Group to avoid layout adjustments
+        Group root = new Group(gamePanel);
 
         // Wrap the root in a Scene
         Scene scene = new Scene(root, gamePanel.screenWidth, gamePanel.screenHeight);
@@ -27,11 +27,20 @@ public class Main extends Application {
         // Prevent resizing
         //primaryStage.setResizable(false);
 
+        // Listen for window resizing
+        scene.widthProperty().addListener((obs, oldVal, newVal) -> {
+            gamePanel.resizeCanvas(newVal.doubleValue(), scene.getHeight());
+        });
+
+        scene.heightProperty().addListener((obs, oldVal, newVal) -> {
+            gamePanel.resizeCanvas(scene.getWidth(), newVal.doubleValue());
+        });
+
         // Show the stage
         primaryStage.show();
 
         // Start the game loop
-        gamePanel.startGameThread();
+        //gamePanel.startGameThread();
     }
 
     public static void main(String[] args) {
