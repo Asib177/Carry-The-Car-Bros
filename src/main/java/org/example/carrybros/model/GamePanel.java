@@ -36,15 +36,9 @@ public class GamePanel extends Canvas {
     public Player player = new Player(this, keyH);
 
     public GamePanel() {
-//        super(768, 576); // Set the canvas size to screen width and height
-        // Use default Canvas constructor
         super();
-
-        // Set canvas size explicitly
         this.setWidth(screenWidth);
         this.setHeight(screenHeight);
-
-        // Enable keyboard focus
         this.setFocusTraversable(true);
         this.setOnKeyPressed(keyH::handle);
         this.setOnKeyReleased(keyH::handle);
@@ -52,7 +46,6 @@ public class GamePanel extends Canvas {
         startGameThread();
     }
 
-    // Getters for world dimensions and tile size
     public int getMaxWorldCol() {
         return maxWorldCol;
     }
@@ -76,7 +69,7 @@ public class GamePanel extends Canvas {
                     return;
                 }
 
-                double deltaTime = (now - lastTime) / 1_000_000_000.0; // Convert nanoseconds to seconds
+                double deltaTime = (now - lastTime) / 1_000_000_000.0;
                 lastTime = now;
                 update(deltaTime);
                 draw();
@@ -88,15 +81,13 @@ public class GamePanel extends Canvas {
     public void update(double deltaTime) {
         tileM.updateCar();
         player.update(deltaTime);
-        updateCamera();  // Update the camera position
+        updateCamera();
     }
 
     public void updateCamera() {
-        // Center the camera on the player
         cameraX = player.worldX - player.screenX / 2;
         cameraY = player.worldY - player.screenY / 2;
 
-        // Ensure the camera stays within the world boundaries
         cameraX = Math.max(0, Math.min(cameraX, worldWidth - screenWidth));
         cameraY = Math.max(0, Math.min(cameraY, worldHeight - screenHeight));
     }
@@ -104,16 +95,13 @@ public class GamePanel extends Canvas {
     public void draw() {
         GraphicsContext gc = getGraphicsContext2D();
 
-        // Clear the screen
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, screenWidth, screenHeight);
 
-        // Draw tiles, player, etc.
         tileM.draw(gc);
         player.draw(gc);
     }
 
-    // Method to resize the canvas
     public void resizeCanvas(double newWidth, double newHeight) {
         screenWidth = (int) newWidth;
         screenHeight = (int) newHeight;
