@@ -28,6 +28,8 @@ public class GamePanel extends Canvas {
 
     public int cameraX = 0;
     public int cameraY = 0;
+    int centeredCameraX;
+    int centeredCameraY;
 
     // Game Components
     public TileManager tileM = new TileManager(this);
@@ -85,11 +87,13 @@ public class GamePanel extends Canvas {
     }
 
     public void updateCamera() {
-        cameraX = player.worldX - player.screenX / 2;
-        cameraY = player.worldY - player.screenY / 2;
+        // Calculate the default camera position
+        centeredCameraX = (int) (player.worldX - screenWidth / 2 + player.solidArea.getWidth() / 2);
+        centeredCameraY = (int) (player.worldY - screenHeight / 2 + player.solidArea.getHeight() / 2);
 
-        cameraX = Math.max(0, Math.min(cameraX, worldWidth - screenWidth));
-        cameraY = Math.max(0, Math.min(cameraY, worldHeight - screenHeight));
+        // Clamp the camera to the world boundaries
+        cameraX = Math.max(0, Math.min(centeredCameraX, worldWidth - screenWidth));
+        cameraY = Math.max(0, Math.min(centeredCameraY, worldHeight - screenHeight));
     }
 
     public void draw() {
