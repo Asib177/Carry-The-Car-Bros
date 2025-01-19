@@ -36,11 +36,10 @@ public class Main extends Application {
             gamePanel.resizeCanvas(scene.getWidth(), newVal.doubleValue());
         });
 
-        // Show the stage
         primaryStage.show();
 
         // Start the game loop
-        //gamePanel.startGameThread();
+        gamePanel.startGameThread();
     }
 
     public static void main(String[] args) {

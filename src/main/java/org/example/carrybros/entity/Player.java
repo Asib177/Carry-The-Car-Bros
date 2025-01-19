@@ -12,8 +12,8 @@ public class Player extends Entity {
     KeyHandler keyH;
 
     // Player-related variables
-    public final int screenX;
-    public final int screenY;
+    public int screenX;
+    public int screenY;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -35,7 +35,7 @@ public class Player extends Entity {
         worldX = gp.tileSize * 5; // Start at some location
         worldY = gp.tileSize * 5;
 
-        speed = 2; // Player speed
+        speed = 3; // Player speed
         direction = "down"; // Initial direction
     }
 
@@ -55,32 +55,32 @@ public class Player extends Entity {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
 
             // Initially assume no collision
-            collisionOn = false;
+            //collisionOn = false;
 
             // Check for collision in the direction the player is attempting to move
             if (keyH.upPressed) {
                 direction = "up";
-                gp.cChecker.checkTile(this);  // Check for collision upwards
-                if (!collisionOn) {
-                    worldY -= speed;  // Move up if no collision
+                gp.cChecker.checkTile(this);
+                if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
+                    worldY -= speed;
                 }
             } else if (keyH.downPressed) {
                 direction = "down";
-                gp.cChecker.checkTile(this);  // Check for collision downwards
-                if (!collisionOn) {
-                    worldY += speed;  // Move down if no collision
+                gp.cChecker.checkTile(this);
+                if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
+                    worldY += speed;
                 }
             } else if (keyH.leftPressed) {
                 direction = "left";
-                gp.cChecker.checkTile(this);  // Check for collision to the left
-                if (!collisionOn) {
-                    worldX -= speed;  // Move left if no collision
+                gp.cChecker.checkTile(this);
+                if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
+                    worldX -= speed;
                 }
             } else if (keyH.rightPressed) {
                 direction = "right";
-                gp.cChecker.checkTile(this);  // Check for collision to the right
-                if (!collisionOn) {
-                    worldX += speed;  // Move right if no collision
+                gp.cChecker.checkTile(this);
+                if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
+                    worldX += speed;
                 }
             }
 
@@ -109,9 +109,21 @@ public class Player extends Entity {
             case "right" -> playerImage = spriteNum == 1 ? right1 : right2;
         }
 
+        screenX = worldX - gp.cameraX;
+        screenY = worldY - gp.cameraY;
+
+        // Adjust for borders: Allow the player to move beyond the screen when near the map edge
+        if (gp.cameraX == 0) screenX = worldX; // Left edge
+        if (gp.cameraY == 0) screenY = worldY; // Top edge
+        if (gp.cameraX == gp.worldWidth - gp.screenWidth) screenX = screenX + gp.cameraX - (gp.worldWidth - gp.screenWidth);
+        if (gp.cameraY == gp.worldHeight - gp.screenHeight) screenY = screenY + gp.cameraY - (gp.worldHeight - gp.screenHeight);
+
         // Draw the player relative to the camera
-        if (playerImage != null) {
-            gc.drawImage(playerImage, worldX - gp.cameraX, worldY - gp.cameraY, gp.tileSize, gp.tileSize);
-        }
+        //if (playerImage != null) {
+         //   gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
+        //}
+
+        // Draw the player sprite
+        gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
     }
 }

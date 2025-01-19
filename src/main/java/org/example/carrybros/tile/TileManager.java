@@ -2,7 +2,7 @@ package org.example.carrybros.tile;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
+import org.example.carrybros.entity.Player;
 import org.example.carrybros.model.GamePanel;
 
 import java.io.BufferedReader;
@@ -17,7 +17,8 @@ public class TileManager {
     public Tile[] tile;
     public int[][] mapTileNum;
 
-    public int carX, carY, carSpeed, carRadius, pathIndex;
+    public float carX, carY, carSpeed;
+    public int carRadius, pathIndex;
     public String carDirection;
     public boolean carMoving;
     public int[][] path;
@@ -31,10 +32,10 @@ public class TileManager {
 
         mapTileNum = new int[gp.getMaxWorldCol()][gp.getMaxWorldRow()];
 
-//        loadMap("/map/myMap01.txt");
-        //loadMap("/map/world01.txt");testingMap
+        //loadMap("/map/myMap01.txt");
+//        loadMap("/map/world01.txt");testingMap
         //loadMap("/map/testingMap.txt");
-        loadMap("/map/myMap02.txt");
+       loadMap("/map/myMap02.txt");
         getTileImage();
         initializeCar();
         loadCarImages();
@@ -75,8 +76,8 @@ public class TileManager {
     }
 
     private void initializeCar() {
-        carSpeed = 1;
-        carRadius = 100;
+        carSpeed = 0.25F;
+        carRadius = 200;
         pathIndex = 0;
         carDirection = "DOWN";
         carMoving = false;
@@ -161,9 +162,27 @@ public class TileManager {
 //        }
     }
 
+    public boolean isCollidingWithCar(Player player) {
+        // Calculate the player's hitbox
+        double playerLeft = player.worldX + player.solidArea.getX();
+        double playerRight = playerLeft + player.solidArea.getWidth();
+        double playerTop = player.worldY + player.solidArea.getY();
+        double playerBottom = playerTop + player.solidArea.getHeight();
+
+        // Calculate the car's hitbox
+        double carLeft = carX - gp.getTileSize() / 2;
+        double carRight = carLeft + gp.getTileSize();
+        double carTop = carY - gp.getTileSize() / 2;
+        double carBottom = carTop + gp.getTileSize();
+
+        // Check if the player's hitbox intersects with the car's hitbox
+        return playerRight > carLeft && playerLeft < carRight && playerBottom > carTop && playerTop < carBottom;
+    }
+
+
     public boolean isPlayerNearCar() {
-        int dx = gp.player.worldX - carX;
-        int dy = gp.player.worldY - carY;
+        float dx = gp.player.worldX - carX;
+        float dy = gp.player.worldY - carY;
         double distance = Math.sqrt(dx * dx + dy * dy);
         return distance <= carRadius;
     }
@@ -247,25 +266,25 @@ public class TileManager {
             }
         }
 
-//        // Draw the car radius as a circle
-//        gc.setGlobalAlpha(0.3); // Make the circle semi-transparent
-//        gc.setFill(javafx.scene.paint.Color.RED);
-//        gc.fillOval(
-//                carX - gp.cameraX - carRadius, // X-coordinate (adjusted for the camera and radius)
-//                carY - gp.cameraY - carRadius, // Y-coordinate (adjusted for the camera and radius)
-//                carRadius * 2,                 // Circle width (diameter)
-//                carRadius * 2                  // Circle height (diameter)
-//        );
-//        gc.setGlobalAlpha(1.0); // Reset transparency to default
-
-        gc.setStroke(Color.GREEN);
-        gc.setLineWidth(2); // Set the thickness of the outline
-        gc.strokeOval(
-                carX - gp.cameraX - carRadius,
-                carY - gp.cameraY - carRadius,
-                carRadius * 2,
-                carRadius * 2
+        // Draw the car radius as a circle
+        gc.setGlobalAlpha(0.3); // Make the circle semi-transparent
+        gc.setFill(javafx.scene.paint.Color.CADETBLUE);    // CADETBLUE
+        gc.fillOval(
+                carX - gp.cameraX - carRadius, // X-coordinate (adjusted for the camera and radius)
+                carY - gp.cameraY - carRadius, // Y-coordinate (adjusted for the camera and radius)
+                carRadius * 2,                 // Circle width (diameter)
+                carRadius * 2                  // Circle height (diameter)
         );
+        gc.setGlobalAlpha(1.0); // Reset transparency to default
+
+//        gc.setStroke(Color.GREEN);
+//        gc.setLineWidth(2); // Set the thickness of the outline
+//        gc.strokeOval(
+//                carX - gp.cameraX - carRadius,
+//                carY - gp.cameraY - carRadius,
+//                carRadius * 2,
+//                carRadius * 2
+//        );
 
         // Draw the car
         Image carImage = switch (carDirection) {
