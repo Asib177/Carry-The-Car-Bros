@@ -11,7 +11,6 @@ public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyH;
 
-    // Player-related variables
     public int screenX;
     public int screenY;
 
@@ -19,11 +18,10 @@ public class Player extends Entity {
         this.gp = gp;
         this.keyH = keyH;
 
-        // Set Player in the middle of screen
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
-        solidArea = new Rectangle(8, 16, 32, 32);
+        solidArea = new Rectangle(8, 8, 32, 32);
 
         setDefaultValues();
         getPlayerImage();
@@ -32,15 +30,14 @@ public class Player extends Entity {
     public void setDefaultValues() {
         startTime = System.currentTimeMillis();
 
-        worldX = gp.tileSize * 5; // Start at some location
+        worldX = gp.tileSize * 5;
         worldY = gp.tileSize * 5;
 
-        speed = 3; // Player speed
-        direction = "down"; // Initial direction
+        speed = 3;
+        direction = "down";
     }
 
     public void getPlayerImage() {
-        // Load player sprite images
         up1 = new Image(getClass().getResourceAsStream("/player/boy_up_1.png"));
         up2 = new Image(getClass().getResourceAsStream("/player/boy_up_2.png"));
         down1 = new Image(getClass().getResourceAsStream("/player/boy_down_1.png"));
@@ -51,13 +48,9 @@ public class Player extends Entity {
         right2 = new Image(getClass().getResourceAsStream("/player/boy_right_2.png"));
     }
 
-    public void update(double deltaTime) {
+    public void update() {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
 
-            // Initially assume no collision
-            //collisionOn = false;
-
-            // Check for collision in the direction the player is attempting to move
             if (keyH.upPressed) {
                 direction = "up";
                 gp.cChecker.checkTile(this);
@@ -84,11 +77,9 @@ public class Player extends Entity {
                 }
             }
 
-            // Prevent the player from moving outside the world boundaries
             worldX = Math.max(0, Math.min(worldX, gp.worldWidth - gp.tileSize));
             worldY = Math.max(0, Math.min(worldY, gp.worldHeight - gp.tileSize));
 
-            // Sprite animation logic
             spriteCounter++;
             if (spriteCounter > 12) {
                 spriteNum = (spriteNum == 1) ? 2 : 1;
@@ -97,11 +88,9 @@ public class Player extends Entity {
         }
     }
 
-
     public void draw(GraphicsContext gc) {
         Image playerImage = null;
 
-        // Choose sprite image based on direction
         switch (direction) {
             case "up" -> playerImage = spriteNum == 1 ? up1 : up2;
             case "down" -> playerImage = spriteNum == 1 ? down1 : down2;
@@ -112,18 +101,13 @@ public class Player extends Entity {
         screenX = worldX - gp.cameraX;
         screenY = worldY - gp.cameraY;
 
-        // Adjust for borders: Allow the player to move beyond the screen when near the map edge
-        if (gp.cameraX == 0) screenX = worldX; // Left edge
-        if (gp.cameraY == 0) screenY = worldY; // Top edge
+        if (gp.cameraX == 0) screenX = worldX;
+        if (gp.cameraY == 0) screenY = worldY;
         if (gp.cameraX == gp.worldWidth - gp.screenWidth) screenX = screenX + gp.cameraX - (gp.worldWidth - gp.screenWidth);
         if (gp.cameraY == gp.worldHeight - gp.screenHeight) screenY = screenY + gp.cameraY - (gp.worldHeight - gp.screenHeight);
 
-        // Draw the player relative to the camera
-        //if (playerImage != null) {
-         //   gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
-        //}
-
-        // Draw the player sprite
-        gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
+        if (playerImage != null) {
+            gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
+        }
     }
 }

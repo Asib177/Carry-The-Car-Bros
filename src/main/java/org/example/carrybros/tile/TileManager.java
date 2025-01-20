@@ -27,14 +27,12 @@ public class TileManager {
     public TileManager(GamePanel gp) {
         this.gp = gp;
 
-        int countTile = 50; // Number of different tiles
+        int countTile = 50;
         tile = new Tile[countTile];
 
         mapTileNum = new int[gp.getMaxWorldCol()][gp.getMaxWorldRow()];
 
         //loadMap("/map/myMap01.txt");
-//        loadMap("/map/world01.txt");testingMap
-        //loadMap("/map/testingMap.txt");
        loadMap("/map/myMap02.txt");
         getTileImage();
         initializeCar();
@@ -163,19 +161,16 @@ public class TileManager {
     }
 
     public boolean isCollidingWithCar(Player player) {
-        // Calculate the player's hitbox
         double playerLeft = player.worldX + player.solidArea.getX();
         double playerRight = playerLeft + player.solidArea.getWidth();
         double playerTop = player.worldY + player.solidArea.getY();
         double playerBottom = playerTop + player.solidArea.getHeight();
 
-        // Calculate the car's hitbox
         double carLeft = carX - gp.getTileSize() / 2;
         double carRight = carLeft + gp.getTileSize();
         double carTop = carY - gp.getTileSize() / 2;
         double carBottom = carTop + gp.getTileSize();
 
-        // Check if the player's hitbox intersects with the car's hitbox
         return playerRight > carLeft && playerLeft < carRight && playerBottom > carTop && playerTop < carBottom;
     }
 
@@ -233,11 +228,9 @@ public class TileManager {
                 int worldX = worldCol * gp.getTileSize();
                 int worldY = worldRow * gp.getTileSize();
 
-                // Calculate the screen position based on the camera
                 int screenX = worldX - gp.cameraX;
                 int screenY = worldY - gp.cameraY;
 
-                // Draw only tiles that are visible on the screen
                 if (screenX + gp.getTileSize() > 0 && screenX < gp.screenWidth &&
                         screenY + gp.getTileSize() > 0 && screenY < gp.screenHeight) {
                     gc.drawImage(tile[tileNum].image, screenX, screenY, gp.getTileSize(), gp.getTileSize());
@@ -250,43 +243,16 @@ public class TileManager {
 
         cameraDraw(gc);
 
-        for (int worldRow = 0; worldRow < gp.getMaxWorldRow(); worldRow++) {
-            for (int worldCol = 0; worldCol < gp.getMaxWorldCol(); worldCol++) {
-                int tileNum = mapTileNum[worldCol][worldRow];
-                int worldX = worldCol * gp.getTileSize();
-                int worldY = worldRow * gp.getTileSize();
-                int screenX = worldX - gp.cameraX;
-                int screenY = worldY - gp.cameraY;
-
-                // Only draw tiles visible on screen
-                if (screenX + gp.getTileSize() > 0 && screenX < gp.screenWidth &&
-                        screenY + gp.getTileSize() > 0 && screenY < gp.screenHeight) {
-                    gc.drawImage(tile[tileNum].image, screenX, screenY, gp.getTileSize(), gp.getTileSize());
-                }
-            }
-        }
-
-        // Draw the car radius as a circle
-        gc.setGlobalAlpha(0.3); // Make the circle semi-transparent
+        gc.setGlobalAlpha(0.3);
         gc.setFill(javafx.scene.paint.Color.CADETBLUE);    // CADETBLUE
         gc.fillOval(
-                carX - gp.cameraX - carRadius, // X-coordinate (adjusted for the camera and radius)
-                carY - gp.cameraY - carRadius, // Y-coordinate (adjusted for the camera and radius)
-                carRadius * 2,                 // Circle width (diameter)
-                carRadius * 2                  // Circle height (diameter)
+                carX - gp.cameraX - carRadius,
+                carY - gp.cameraY - carRadius,
+                carRadius * 2,
+                carRadius * 2
         );
-        gc.setGlobalAlpha(1.0); // Reset transparency to default
+        gc.setGlobalAlpha(1.0);
 
-//        gc.setStroke(Color.GREEN);
-//        gc.setLineWidth(2); // Set the thickness of the outline
-//        gc.strokeOval(
-//                carX - gp.cameraX - carRadius,
-//                carY - gp.cameraY - carRadius,
-//                carRadius * 2,
-//                carRadius * 2
-//        );
-
-        // Draw the car
         Image carImage = switch (carDirection) {
             case "UP" -> carUp;
             case "DOWN" -> carDown;

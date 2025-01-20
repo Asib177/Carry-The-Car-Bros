@@ -23,7 +23,7 @@ public class CollisionChecker {
 
         int tileNum1, tileNum2;
 
-        entity.collisionOn = false; // Reset collision state before checking
+        entity.collisionOn = false;
 
         switch (entity.direction) {
             case "up" -> {

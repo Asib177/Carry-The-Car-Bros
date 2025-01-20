@@ -9,12 +9,10 @@ import org.example.carrybros.tile.TileManager;
 
 public class GamePanel extends Canvas {
 
-    // Screen settings
-    public final int tileSize = 48; // 48x48 tiles
+    public final int tileSize = 48;
 
     public final int maxScreenCol = 20;
     public final int maxScreenRow = 12;
-    // World Map Settings
 //    public final int maxWorldCol = 23;
 //    public final int maxWorldRow = 20;
     public final int maxWorldCol = 50;
@@ -31,7 +29,6 @@ public class GamePanel extends Canvas {
     int centeredCameraX;
     int centeredCameraY;
 
-    // Game Components
     public TileManager tileM = new TileManager(this);
     public KeyHandler keyH = new KeyHandler();
     public CollisionChecker cChecker = new CollisionChecker(this);
@@ -82,16 +79,14 @@ public class GamePanel extends Canvas {
 
     public void update(double deltaTime) {
         tileM.updateCar();
-        player.update(deltaTime);
+        player.update();
         updateCamera();
     }
 
     public void updateCamera() {
-        // Calculate the default camera position
         centeredCameraX = (int) (player.worldX - screenWidth / 2 + player.solidArea.getWidth() / 2);
         centeredCameraY = (int) (player.worldY - screenHeight / 2 + player.solidArea.getHeight() / 2);
 
-        // Clamp the camera to the world boundaries
         cameraX = Math.max(0, Math.min(centeredCameraX, worldWidth - screenWidth));
         cameraY = Math.max(0, Math.min(centeredCameraY, worldHeight - screenHeight));
     }
