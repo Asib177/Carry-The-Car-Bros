@@ -2,42 +2,32 @@ package org.example.carrybros.entity;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.scene.shape.Rectangle;
 import org.example.carrybros.model.GamePanel;
 import org.example.carrybros.model.KeyHandler;
+import javafx.scene.input.MouseEvent;
+
 
 public class Player extends Entity {
-
     GamePanel gp;
     KeyHandler keyH;
-
-    public int screenX;
-    public int screenY;
-    private double gunOffsetX = 20;  // Horizontal offset of the gun
-    private double gunOffsetY = 10;  // Vertical offset of the gun
-    private double gunAngle = 0;     // Angle at which the gun is rotated
-    private double gunDistance = 70; // Fixed distance from the player
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
-
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
-
         solidArea = new Rectangle(8, 8, 32, 32);
-
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues() {
         startTime = System.currentTimeMillis();
-
         worldX = gp.tileSize * 5;
         worldY = gp.tileSize * 5;
-
-        speed = 3;
+        playerSpeed = 3;
         direction = "down";
     }
 
@@ -53,12 +43,43 @@ public class Player extends Entity {
         gunImage = new Image(getClass().getResourceAsStream("/images/NewGun.png"));
     }
 
-    // Update gun position based on mouse coordinates
-    public void updateGunPosition(double mouseX, double mouseY) {
-        double deltaX = mouseX - screenX - gunOffsetX;
-        double deltaY = mouseY - screenY - gunOffsetY;
-        gunAngle = Math.atan2(deltaY, deltaX); // Calculate the angle between player and mouse
+    public void handleMouseClick(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastShotTime >= fireRate) {
+                // Get the gun position based on player's world coordinates
+                double bulletX = worldX + gunOffsetX + gunDistance * Math.cos(gunAngle);
+                double bulletY = worldY + gunOffsetY + gunDistance * Math.sin(gunAngle);
+
+                // Add the bullet to the list with the correct world coordinates
+                bullets.add(new Bullet(bulletX, bulletY, gunAngle));
+                lastShotTime = currentTime;
+            }
+        }
     }
+
+
+    // Update the gun position to ensure consistent distance from the player
+    public void updateGunPosition(double mouseX, double mouseY) {
+        // Calculate the direction to the mouse position from the player's screen position
+        double deltaX = mouseX - (screenX + gunOffsetX);  // Difference in X
+        double deltaY = mouseY - (screenY + gunOffsetY);  // Difference in Y
+        gunAngle = Math.atan2(deltaY, deltaX);  // Calculate the angle of the gun
+    }
+
+    public void updateBullets() {
+        bullets.removeIf(bullet -> bullet.isOffScreen(gp.screenWidth, gp.screenHeight));
+        for (Bullet bullet : bullets) {
+            bullet.update(); // Update each bullet’s position
+        }
+    }
+
+    public void drawBullets(GraphicsContext gc) {
+        for (Bullet bullet : bullets) {
+            bullet.draw(gc); // Draw each bullet
+        }
+    }
+
 
     public void update() {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
@@ -67,25 +88,25 @@ public class Player extends Entity {
                 direction = "up";
                 gp.cChecker.checkTile(this);
                 if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
-                    worldY -= speed;
+                    worldY -= playerSpeed;
                 }
             } else if (keyH.downPressed) {
                 direction = "down";
                 gp.cChecker.checkTile(this);
                 if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
-                    worldY += speed;
+                    worldY += playerSpeed;
                 }
             } else if (keyH.leftPressed) {
                 direction = "left";
                 gp.cChecker.checkTile(this);
                 if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
-                    worldX -= speed;
+                    worldX -= playerSpeed;
                 }
             } else if (keyH.rightPressed) {
                 direction = "right";
                 gp.cChecker.checkTile(this);
                 if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
-                    worldX += speed;
+                    worldX += playerSpeed;
                 }
             }
 
@@ -122,12 +143,16 @@ public class Player extends Entity {
             gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
         }
 
-        // Calculate the gun's fixed position based on the player's position and the fixed distance
-        double gunX = screenX + gunOffsetX + gunDistance * Math.cos(gunAngle);
-        double gunY = screenY + gunOffsetY + gunDistance * Math.sin(gunAngle);
+        drawGun(gc);
+    }
+
+    private void drawGun(GraphicsContext gc) {
+//         Calculate the gun's fixed position based on the player's position and the fixed distance
+        gunX = worldX  + gunOffsetX + gunDistance * Math.cos(gunAngle);
+        gunY = worldY  + gunOffsetY + gunDistance * Math.sin(gunAngle);
 
         // Check if the mouse is to the left of the player
-        boolean flipGun = gunX < screenX;
+        boolean flipGun = gunX < worldX;
 
         // Draw the gun at the correct position with proper rotation
         gc.save(); // Save the current state of the canvas
@@ -143,3 +168,4 @@ public class Player extends Entity {
         gc.restore(); // Restore the canvas to its original state
     }
 }
+

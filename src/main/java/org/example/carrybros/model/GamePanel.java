@@ -8,8 +8,6 @@ import org.example.carrybros.entity.Player;
 import org.example.carrybros.net.Client;
 import org.example.carrybros.tile.TileManager;
 
-import java.awt.event.MouseEvent;
-
 public class GamePanel extends Canvas {
 
     public final int tileSize = 48;
@@ -47,17 +45,21 @@ public class GamePanel extends Canvas {
 
         // Mouse movement listener to update gun angle
         this.setOnMouseMoved(this::handleMouseMovement);
+        this.setOnMouseClicked(event -> {
+            player.handleMouseClick(event);
+        });
 
         startGameThread();
     }
 
     private void handleMouseMovement(javafx.scene.input.MouseEvent mouseEvent) {
-        double mouseX = mouseEvent.getSceneX(); // Use mouseEvent instead of event
-        double mouseY = mouseEvent.getSceneY(); // Use mouseEvent instead of event
+        double mouseX = mouseEvent.getSceneX();  // Get mouse X position
+        double mouseY = mouseEvent.getSceneY();  // Get mouse Y position
 
-        // Pass the mouse coordinates to the player to update the gun angle
+        // Pass the mouse coordinates to the player to update the gun angle and position
         player.updateGunPosition(mouseX, mouseY);
     }
+
 
     // Process mouse input and send the game action (if multiplayer)
     private void processMouseInput(int mouseX, int mouseY) {
@@ -104,6 +106,7 @@ public class GamePanel extends Canvas {
         tileM.updateCar();
         player.update();
         updateCamera();
+        player.updateBullets();
     }
 
     public void updateCamera() {
@@ -122,6 +125,7 @@ public class GamePanel extends Canvas {
 
         tileM.draw(gc);
         player.draw(gc);
+        player.drawBullets(gc);
     }
 
     public void resizeCanvas(double newWidth, double newHeight) {
