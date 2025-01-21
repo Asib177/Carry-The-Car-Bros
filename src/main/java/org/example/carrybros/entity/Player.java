@@ -13,6 +13,10 @@ public class Player extends Entity {
 
     public int screenX;
     public int screenY;
+    private double gunOffsetX = 20;  // Horizontal offset of the gun
+    private double gunOffsetY = 10;  // Vertical offset of the gun
+    private double gunAngle = 0;     // Angle at which the gun is rotated
+    private double gunDistance = 70; // Fixed distance from the player
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -46,6 +50,14 @@ public class Player extends Entity {
         left2 = new Image(getClass().getResourceAsStream("/player/boy_left_2.png"));
         right1 = new Image(getClass().getResourceAsStream("/player/boy_right_1.png"));
         right2 = new Image(getClass().getResourceAsStream("/player/boy_right_2.png"));
+        gunImage = new Image(getClass().getResourceAsStream("/images/NewGun.png"));
+    }
+
+    // Update gun position based on mouse coordinates
+    public void updateGunPosition(double mouseX, double mouseY) {
+        double deltaX = mouseX - screenX - gunOffsetX;
+        double deltaY = mouseY - screenY - gunOffsetY;
+        gunAngle = Math.atan2(deltaY, deltaX); // Calculate the angle between player and mouse
     }
 
     public void update() {
@@ -109,5 +121,25 @@ public class Player extends Entity {
         if (playerImage != null) {
             gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
         }
+
+        // Calculate the gun's fixed position based on the player's position and the fixed distance
+        double gunX = screenX + gunOffsetX + gunDistance * Math.cos(gunAngle);
+        double gunY = screenY + gunOffsetY + gunDistance * Math.sin(gunAngle);
+
+        // Check if the mouse is to the left of the player
+        boolean flipGun = gunX < screenX;
+
+        // Draw the gun at the correct position with proper rotation
+        gc.save(); // Save the current state of the canvas
+        gc.translate(gunX + 16, gunY + 16); // Translate the canvas to the gun's center
+        gc.rotate(Math.toDegrees(gunAngle)); // Rotate the canvas by the gun's angle
+
+        // Flip the gun horizontally when the cursor is to the left of the player
+        if (flipGun) {
+            gc.scale(1, -1); // Flip the gun horizontally
+        }
+
+        gc.drawImage(gunImage, -16, -16); // Draw the gun (centered around the translated point)
+        gc.restore(); // Restore the canvas to its original state
     }
 }

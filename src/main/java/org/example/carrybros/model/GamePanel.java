@@ -5,7 +5,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.animation.AnimationTimer;
 import org.example.carrybros.entity.Player;
+import org.example.carrybros.net.Client;
 import org.example.carrybros.tile.TileManager;
+
+import java.awt.event.MouseEvent;
 
 public class GamePanel extends Canvas {
 
@@ -13,13 +16,11 @@ public class GamePanel extends Canvas {
 
     public final int maxScreenCol = 20;
     public final int maxScreenRow = 12;
-//    public final int maxWorldCol = 23;
-//    public final int maxWorldRow = 20;
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
 
-    public int screenWidth = tileSize * maxScreenCol; // 960 pixels
-    public int screenHeight = tileSize * maxScreenRow; // 576 pixels
+    public int screenWidth = tileSize * maxScreenCol;
+    public int screenHeight = tileSize * maxScreenRow;
 
     public final int worldWidth = tileSize * maxWorldCol;
     public final int worldHeight = tileSize * maxWorldRow;
@@ -34,6 +35,8 @@ public class GamePanel extends Canvas {
     public CollisionChecker cChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyH);
 
+    private Client client;
+
     public GamePanel() {
         super();
         this.setWidth(screenWidth);
@@ -42,7 +45,27 @@ public class GamePanel extends Canvas {
         this.setOnKeyPressed(keyH::handle);
         this.setOnKeyReleased(keyH::handle);
 
+        // Mouse movement listener to update gun angle
+        this.setOnMouseMoved(this::handleMouseMovement);
+
         startGameThread();
+    }
+
+    private void handleMouseMovement(javafx.scene.input.MouseEvent mouseEvent) {
+        double mouseX = mouseEvent.getSceneX(); // Use mouseEvent instead of event
+        double mouseY = mouseEvent.getSceneY(); // Use mouseEvent instead of event
+
+        // Pass the mouse coordinates to the player to update the gun angle
+        player.updateGunPosition(mouseX, mouseY);
+    }
+
+    // Process mouse input and send the game action (if multiplayer)
+    private void processMouseInput(int mouseX, int mouseY) {
+        // Example: Send shooting action to server (optional)
+        GameAction action = new GameAction("shoot", mouseX, mouseY, true);
+        if (client != null) {
+            client.sendGameAction(action);
+        }
     }
 
     public int getMaxWorldCol() {
