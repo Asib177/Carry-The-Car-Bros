@@ -118,14 +118,35 @@ public class Player extends Entity {
             gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
         }
 
-        // Draw gun
-        if (gunImage != null) {
-            gc.save();
-            gc.translate(gunX, gunY);
-            gc.rotate(Math.toDegrees(gunAngle));
-            gc.drawImage(gunImage, -gp.tileSize / 4, -gp.tileSize / 4, gp.tileSize / 2, gp.tileSize / 2);
-            gc.restore();
+//        // Draw gun
+//        if (gunImage != null) {
+//            gc.save();
+//            gc.translate(gunX, gunY);
+//            gc.rotate(Math.toDegrees(gunAngle));
+//            gc.drawImage(gunImage, -gp.tileSize / 4, -gp.tileSize / 4, gp.tileSize / 2, gp.tileSize / 2);
+//            gc.restore();
+//        }
+
+        drawGun(gc);
+    }
+
+    private void drawGun(GraphicsContext gc) {
+        // Check if the mouse is to the left of the player
+        boolean flipGun = gunX < worldX;
+
+        // Draw the gun at the correct position with proper rotation
+        gc.save(); // Save the current state of the canvas
+        gc.translate(gunX, gunY); // Translate the canvas to the gun's center
+
+        gc.rotate(Math.toDegrees(gunAngle)); // Rotate the canvas by the gun's angle
+
+        // Flip the gun horizontally when the cursor is to the left of the player
+        if (flipGun) {
+            gc.scale(1, -1); // Flip the gun horizontally
         }
+
+        gc.drawImage(gunImage, -gp.tileSize / 4, -gp.tileSize / 4, gp.tileSize / 2, gp.tileSize / 2);
+        gc.restore(); // Restore the canvas to its original state
     }
 }
 
