@@ -152,18 +152,12 @@ public class TileManager {
             e.printStackTrace();
             throw new RuntimeException("Error reading the map file.", e);
         }
-//        for (int row = 0; row < gp.getMaxWorldRow(); row++) {
-//            for (int col = 0; col < gp.getMaxWorldCol(); col++) {
-//                System.out.print(mapTileNum[col][row] + " ");
-//            }
-//            System.out.println();
-//        }
     }
 
     public boolean isCollidingWithCar(Player player) {
-        double playerLeft = player.worldX + player.solidArea.getX();
+        double playerLeft = player.playerXposition + player.solidArea.getX();
         double playerRight = playerLeft + player.solidArea.getWidth();
-        double playerTop = player.worldY + player.solidArea.getY();
+        double playerTop = player.playerYposition + player.solidArea.getY();
         double playerBottom = playerTop + player.solidArea.getHeight();
 
         double carLeft = carX - gp.getTileSize() / 2;
@@ -176,8 +170,8 @@ public class TileManager {
 
 
     public boolean isPlayerNearCar() {
-        float dx = gp.player.worldX - carX;
-        float dy = gp.player.worldY - carY;
+        float dx = gp.player.playerXposition - carX;
+        float dy = gp.player.playerYposition - carY;
         double distance = Math.sqrt(dx * dx + dy * dy);
         return distance <= carRadius;
     }

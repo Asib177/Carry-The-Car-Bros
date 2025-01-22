@@ -11,7 +11,6 @@ public class Player extends Entity {
     KeyHandler keyH;
 
     private Image gunImage;
-    private double gunX, gunY, gunAngle;
     private final double gunDistance = 50;
 
     public Player(GamePanel gp, KeyHandler keyH) {
@@ -26,8 +25,8 @@ public class Player extends Entity {
 
     public void setDefaultValues() {
         startTime = System.currentTimeMillis();
-        worldX = gp.tileSize * 5;
-        worldY = gp.tileSize * 5;
+        playerXposition = gp.tileSize * 5;
+        playerYposition = gp.tileSize * 5;
         playerSpeed = 3;
         direction = "down";
     }
@@ -52,30 +51,30 @@ public class Player extends Entity {
                 direction = "up";
                 gp.cChecker.checkTile(this);
                 if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
-                    worldY -= playerSpeed;
+                    playerYposition -= playerSpeed;
                 }
             } else if (keyH.downPressed) {
                 direction = "down";
                 gp.cChecker.checkTile(this);
                 if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
-                    worldY += playerSpeed;
+                    playerYposition += playerSpeed;
                 }
             } else if (keyH.leftPressed) {
                 direction = "left";
                 gp.cChecker.checkTile(this);
                 if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
-                    worldX -= playerSpeed;
+                    playerXposition -= playerSpeed;
                 }
             } else if (keyH.rightPressed) {
                 direction = "right";
                 gp.cChecker.checkTile(this);
                 if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
-                    worldX += playerSpeed;
+                    playerXposition += playerSpeed;
                 }
             }
 
-            worldX = Math.max(0, Math.min(worldX, gp.worldWidth - gp.tileSize));
-            worldY = Math.max(0, Math.min(worldY, gp.worldHeight - gp.tileSize));
+            playerXposition = Math.max(0, Math.min(playerXposition, gp.worldWidth - gp.tileSize));
+            playerYposition = Math.max(0, Math.min(playerYposition, gp.worldHeight - gp.tileSize));
 
             spriteCounter++;
             if (spriteCounter > 12) {
@@ -106,11 +105,11 @@ public class Player extends Entity {
             case "right" -> playerImage = spriteNum == 1 ? right1 : right2;
         }
 
-        screenX = worldX - gp.cameraX;
-        screenY = worldY - gp.cameraY;
+        screenX = playerXposition - gp.cameraX;
+        screenY = playerYposition - gp.cameraY;
 
-        if (gp.cameraX == 0) screenX = worldX;
-        if (gp.cameraY == 0) screenY = worldY;
+        if (gp.cameraX == 0) screenX = playerXposition;
+        if (gp.cameraY == 0) screenY = playerYposition;
         if (gp.cameraX == gp.worldWidth - gp.screenWidth) screenX = screenX + gp.cameraX - (gp.worldWidth - gp.screenWidth);
         if (gp.cameraY == gp.worldHeight - gp.screenHeight) screenY = screenY + gp.cameraY - (gp.worldHeight - gp.screenHeight);
 
@@ -132,7 +131,7 @@ public class Player extends Entity {
 
     private void drawGun(GraphicsContext gc) {
         // Check if the mouse is to the left of the player
-        boolean flipGun = gunX < worldX;
+        boolean flipGun = gunX < playerXposition;
 
         // Draw the gun at the correct position with proper rotation
         gc.save(); // Save the current state of the canvas
