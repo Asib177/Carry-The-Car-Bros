@@ -2,40 +2,40 @@ package org.example.carrybros.model;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.animation.AnimationTimer;
+import org.example.carrybros.entity.Bullet;
 import org.example.carrybros.entity.Player;
 import org.example.carrybros.tile.TileManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GamePanel extends Canvas {
 
-    // Screen settings
-    public final int tileSize = 48; // 48x48 tiles
-
+    public final int tileSize = 48;
     public final int maxScreenCol = 20;
     public final int maxScreenRow = 12;
-    // World Map Settings
-//    public final int maxWorldCol = 23;
-//    public final int maxWorldRow = 20;
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
-
-    public int screenWidth = tileSize * maxScreenCol; // 960 pixels
-    public int screenHeight = tileSize * maxScreenRow; // 576 pixels
-
+    public int screenWidth = tileSize * maxScreenCol;
+    public int screenHeight = tileSize * maxScreenRow;
     public final int worldWidth = tileSize * maxWorldCol;
     public final int worldHeight = tileSize * maxWorldRow;
-
     public int cameraX = 0;
     public int cameraY = 0;
     int centeredCameraX;
     int centeredCameraY;
 
-    // Game Components
     public TileManager tileM = new TileManager(this);
     public KeyHandler keyH = new KeyHandler();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyH);
+
+    private List<Bullet> bullets = new ArrayList<>();
+    public double mouseX;
+    public double mouseY;
 
     public GamePanel() {
         super();
@@ -44,7 +44,7 @@ public class GamePanel extends Canvas {
         this.setFocusTraversable(true);
         this.setOnKeyPressed(keyH::handle);
         this.setOnKeyReleased(keyH::handle);
-
+        setupMouseHandlers();
         startGameThread();
     }
 
@@ -80,18 +80,31 @@ public class GamePanel extends Canvas {
         gameLoop.start();
     }
 
+    public void setupMouseHandlers() {
+        // Update gun rotation with mouse movement
+        this.setOnMouseMoved((MouseEvent event) -> {
+            mouseX = event.getX();
+            mouseY = event.getY();
+        });
+
+        // Shoot bullets when mouse is clicked
+        this.setOnMouseClicked((MouseEvent event) -> {
+            bullets.add(new Bullet(player.gunX, player.gunY, player.gunAngle));
+        });
+    }
+
     public void update(double deltaTime) {
         tileM.updateCar();
-        player.update(deltaTime);
+        player.update();
+        bullets.forEach(bullet -> bullet.update(deltaTime)); // Update bullets
+        bullets.removeIf(bullet -> bullet.isOutOfBounds(screenWidth, screenHeight)); // Remove out-of-bounds bullets
         updateCamera();
     }
 
     public void updateCamera() {
-        // Calculate the default camera position
-        centeredCameraX = (int) (player.worldX - screenWidth / 2 + player.solidArea.getWidth() / 2);
-        centeredCameraY = (int) (player.worldY - screenHeight / 2 + player.solidArea.getHeight() / 2);
+        centeredCameraX = (int) (player.playerXposition - screenWidth / 2 + player.solidArea.getWidth() / 2);
+        centeredCameraY = (int) (player.playerYposition - screenHeight / 2 + player.solidArea.getHeight() / 2);
 
-        // Clamp the camera to the world boundaries
         cameraX = Math.max(0, Math.min(centeredCameraX, worldWidth - screenWidth));
         cameraY = Math.max(0, Math.min(centeredCameraY, worldHeight - screenHeight));
     }
@@ -104,6 +117,7 @@ public class GamePanel extends Canvas {
 
         tileM.draw(gc);
         player.draw(gc);
+        bullets.forEach(bullet -> bullet.draw(gc)); // Draw all bullets
     }
 
     public void resizeCanvas(double newWidth, double newHeight) {

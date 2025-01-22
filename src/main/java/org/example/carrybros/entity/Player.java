@@ -7,40 +7,31 @@ import org.example.carrybros.model.GamePanel;
 import org.example.carrybros.model.KeyHandler;
 
 public class Player extends Entity {
-
     GamePanel gp;
     KeyHandler keyH;
 
-    // Player-related variables
-    public int screenX;
-    public int screenY;
+    private Image gunImage;
+    private final double gunDistance = 50;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
-
-        // Set Player in the middle of screen
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
-
-        solidArea = new Rectangle(8, 16, 32, 32);
-
+        solidArea = new Rectangle(8, 8, 32, 32);
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues() {
         startTime = System.currentTimeMillis();
-
-        worldX = gp.tileSize * 5; // Start at some location
-        worldY = gp.tileSize * 5;
-
-        speed = 3; // Player speed
-        direction = "down"; // Initial direction
+        playerXposition = gp.tileSize * 5;
+        playerYposition = gp.tileSize * 5;
+        playerSpeed = 3;
+        direction = "down";
     }
 
     public void getPlayerImage() {
-        // Load player sprite images
         up1 = new Image(getClass().getResourceAsStream("/player/boy_up_1.png"));
         up2 = new Image(getClass().getResourceAsStream("/player/boy_up_2.png"));
         down1 = new Image(getClass().getResourceAsStream("/player/boy_down_1.png"));
@@ -49,59 +40,64 @@ public class Player extends Entity {
         left2 = new Image(getClass().getResourceAsStream("/player/boy_left_2.png"));
         right1 = new Image(getClass().getResourceAsStream("/player/boy_right_1.png"));
         right2 = new Image(getClass().getResourceAsStream("/player/boy_right_2.png"));
+        gunImage = new Image(getClass().getResourceAsStream("/images/NewGun.png"));
     }
 
-    public void update(double deltaTime) {
+
+    public void update() {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
 
-            // Initially assume no collision
-            //collisionOn = false;
-
-            // Check for collision in the direction the player is attempting to move
             if (keyH.upPressed) {
                 direction = "up";
                 gp.cChecker.checkTile(this);
                 if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
-                    worldY -= speed;
+                    playerYposition -= playerSpeed;
                 }
             } else if (keyH.downPressed) {
                 direction = "down";
                 gp.cChecker.checkTile(this);
                 if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
-                    worldY += speed;
+                    playerYposition += playerSpeed;
                 }
             } else if (keyH.leftPressed) {
                 direction = "left";
                 gp.cChecker.checkTile(this);
                 if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
-                    worldX -= speed;
+                    playerXposition -= playerSpeed;
                 }
             } else if (keyH.rightPressed) {
                 direction = "right";
                 gp.cChecker.checkTile(this);
                 if (!collisionOn && !gp.tileM.isCollidingWithCar(this)) {
-                    worldX += speed;
+                    playerXposition += playerSpeed;
                 }
             }
 
-            // Prevent the player from moving outside the world boundaries
-            worldX = Math.max(0, Math.min(worldX, gp.worldWidth - gp.tileSize));
-            worldY = Math.max(0, Math.min(worldY, gp.worldHeight - gp.tileSize));
+            playerXposition = Math.max(0, Math.min(playerXposition, gp.worldWidth - gp.tileSize));
+            playerYposition = Math.max(0, Math.min(playerYposition, gp.worldHeight - gp.tileSize));
 
-            // Sprite animation logic
             spriteCounter++;
             if (spriteCounter > 12) {
                 spriteNum = (spriteNum == 1) ? 2 : 1;
                 spriteCounter = 0;
             }
         }
+        updateGunPosition(gp.mouseX, gp.mouseY); // Update the gun position and angle
     }
 
+
+
+    private void updateGunPosition(double mouseX, double mouseY) {
+        // Calculate angle towards the mouse cursor
+        gunAngle = Math.atan2(mouseY - screenY - gp.tileSize / 2, mouseX - screenX - gp.tileSize / 2);
+        // Calculate gun position based on the player's position and angle
+        gunX = screenX + gp.tileSize / 2 + Math.cos(gunAngle) * gunDistance;
+        gunY = screenY + gp.tileSize / 2 + Math.sin(gunAngle) * gunDistance;
+    }
 
     public void draw(GraphicsContext gc) {
         Image playerImage = null;
 
-        // Choose sprite image based on direction
         switch (direction) {
             case "up" -> playerImage = spriteNum == 1 ? up1 : up2;
             case "down" -> playerImage = spriteNum == 1 ? down1 : down2;
@@ -109,21 +105,47 @@ public class Player extends Entity {
             case "right" -> playerImage = spriteNum == 1 ? right1 : right2;
         }
 
-        screenX = worldX - gp.cameraX;
-        screenY = worldY - gp.cameraY;
+        screenX = playerXposition - gp.cameraX;
+        screenY = playerYposition - gp.cameraY;
 
-        // Adjust for borders: Allow the player to move beyond the screen when near the map edge
-        if (gp.cameraX == 0) screenX = worldX; // Left edge
-        if (gp.cameraY == 0) screenY = worldY; // Top edge
+        if (gp.cameraX == 0) screenX = playerXposition;
+        if (gp.cameraY == 0) screenY = playerYposition;
         if (gp.cameraX == gp.worldWidth - gp.screenWidth) screenX = screenX + gp.cameraX - (gp.worldWidth - gp.screenWidth);
         if (gp.cameraY == gp.worldHeight - gp.screenHeight) screenY = screenY + gp.cameraY - (gp.worldHeight - gp.screenHeight);
 
-        // Draw the player relative to the camera
-        //if (playerImage != null) {
-         //   gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
-        //}
+        if (playerImage != null) {
+            gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
+        }
 
-        // Draw the player sprite
-        gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
+//        // Draw gun
+//        if (gunImage != null) {
+//            gc.save();
+//            gc.translate(gunX, gunY);
+//            gc.rotate(Math.toDegrees(gunAngle));
+//            gc.drawImage(gunImage, -gp.tileSize / 4, -gp.tileSize / 4, gp.tileSize / 2, gp.tileSize / 2);
+//            gc.restore();
+//        }
+
+        drawGun(gc);
+    }
+
+    private void drawGun(GraphicsContext gc) {
+        // Check if the mouse is to the left of the player
+        boolean flipGun = gunX < playerXposition;
+
+        // Draw the gun at the correct position with proper rotation
+        gc.save(); // Save the current state of the canvas
+        gc.translate(gunX, gunY); // Translate the canvas to the gun's center
+
+        gc.rotate(Math.toDegrees(gunAngle)); // Rotate the canvas by the gun's angle
+
+        // Flip the gun horizontally when the cursor is to the left of the player
+        if (flipGun) {
+            gc.scale(1, -1); // Flip the gun horizontally
+        }
+
+        gc.drawImage(gunImage, -gp.tileSize / 4, -gp.tileSize / 4, gp.tileSize / 2, gp.tileSize / 2);
+        gc.restore(); // Restore the canvas to its original state
     }
 }
+
