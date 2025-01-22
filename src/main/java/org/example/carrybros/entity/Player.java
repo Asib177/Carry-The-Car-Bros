@@ -2,16 +2,17 @@ package org.example.carrybros.entity;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseButton;
 import javafx.scene.shape.Rectangle;
 import org.example.carrybros.model.GamePanel;
 import org.example.carrybros.model.KeyHandler;
-import javafx.scene.input.MouseEvent;
-
 
 public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyH;
+
+    private Image gunImage;
+    private double gunX, gunY, gunAngle;
+    private final double gunDistance = 50;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -41,43 +42,6 @@ public class Player extends Entity {
         right1 = new Image(getClass().getResourceAsStream("/player/boy_right_1.png"));
         right2 = new Image(getClass().getResourceAsStream("/player/boy_right_2.png"));
         gunImage = new Image(getClass().getResourceAsStream("/images/NewGun.png"));
-    }
-
-    public void handleMouseClick(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY) {
-            long currentTime = System.currentTimeMillis();
-            if (currentTime - lastShotTime >= fireRate) {
-                // Get the gun position based on player's world coordinates
-                double bulletX = worldX + gunOffsetX + gunDistance * Math.cos(gunAngle);
-                double bulletY = worldY + gunOffsetY + gunDistance * Math.sin(gunAngle);
-
-                // Add the bullet to the list with the correct world coordinates
-                bullets.add(new Bullet(bulletX, bulletY, gunAngle));
-                lastShotTime = currentTime;
-            }
-        }
-    }
-
-
-    // Update the gun position to ensure consistent distance from the player
-    public void updateGunPosition(double mouseX, double mouseY) {
-        // Calculate the direction to the mouse position from the player's screen position
-        double deltaX = mouseX - (screenX + gunOffsetX);  // Difference in X
-        double deltaY = mouseY - (screenY + gunOffsetY);  // Difference in Y
-        gunAngle = Math.atan2(deltaY, deltaX);  // Calculate the angle of the gun
-    }
-
-    public void updateBullets() {
-        bullets.removeIf(bullet -> bullet.isOffScreen(gp.screenWidth, gp.screenHeight));
-        for (Bullet bullet : bullets) {
-            bullet.update(); // Update each bullet’s position
-        }
-    }
-
-    public void drawBullets(GraphicsContext gc) {
-        for (Bullet bullet : bullets) {
-            bullet.draw(gc); // Draw each bullet
-        }
     }
 
 
@@ -119,6 +83,17 @@ public class Player extends Entity {
                 spriteCounter = 0;
             }
         }
+        updateGunPosition(gp.mouseX, gp.mouseY); // Update the gun position and angle
+    }
+
+
+
+    private void updateGunPosition(double mouseX, double mouseY) {
+        // Calculate angle towards the mouse cursor
+        gunAngle = Math.atan2(mouseY - screenY - gp.tileSize / 2, mouseX - screenX - gp.tileSize / 2);
+        // Calculate gun position based on the player's position and angle
+        gunX = screenX + gp.tileSize / 2 + Math.cos(gunAngle) * gunDistance;
+        gunY = screenY + gp.tileSize / 2 + Math.sin(gunAngle) * gunDistance;
     }
 
     public void draw(GraphicsContext gc) {
@@ -143,29 +118,14 @@ public class Player extends Entity {
             gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
         }
 
-        drawGun(gc);
-    }
-
-    private void drawGun(GraphicsContext gc) {
-//         Calculate the gun's fixed position based on the player's position and the fixed distance
-        gunX = worldX  + gunOffsetX + gunDistance * Math.cos(gunAngle);
-        gunY = worldY  + gunOffsetY + gunDistance * Math.sin(gunAngle);
-
-        // Check if the mouse is to the left of the player
-        boolean flipGun = gunX < worldX;
-
-        // Draw the gun at the correct position with proper rotation
-        gc.save(); // Save the current state of the canvas
-        gc.translate(gunX + 16, gunY + 16); // Translate the canvas to the gun's center
-        gc.rotate(Math.toDegrees(gunAngle)); // Rotate the canvas by the gun's angle
-
-        // Flip the gun horizontally when the cursor is to the left of the player
-        if (flipGun) {
-            gc.scale(1, -1); // Flip the gun horizontally
+        // Draw gun
+        if (gunImage != null) {
+            gc.save();
+            gc.translate(gunX, gunY);
+            gc.rotate(Math.toDegrees(gunAngle));
+            gc.drawImage(gunImage, -gp.tileSize / 4, -gp.tileSize / 4, gp.tileSize / 2, gp.tileSize / 2);
+            gc.restore();
         }
-
-        gc.drawImage(gunImage, -16, -16); // Draw the gun (centered around the translated point)
-        gc.restore(); // Restore the canvas to its original state
     }
 }
 

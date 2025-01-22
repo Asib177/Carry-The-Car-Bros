@@ -2,11 +2,16 @@ package org.example.carrybros.model;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.animation.AnimationTimer;
+import org.example.carrybros.entity.Bullet;
+import org.example.carrybros.entity.Gun;
 import org.example.carrybros.entity.Player;
-import org.example.carrybros.net.Client;
 import org.example.carrybros.tile.TileManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GamePanel extends Canvas {
 
@@ -33,7 +38,11 @@ public class GamePanel extends Canvas {
     public CollisionChecker cChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyH);
 
-    private Client client;
+    // New fields for gun and bullets
+    public Gun gun;
+    private List<Bullet> bullets = new ArrayList<>();
+    public double mouseX;
+    public double mouseY;
 
     public GamePanel() {
         super();
@@ -43,31 +52,13 @@ public class GamePanel extends Canvas {
         this.setOnKeyPressed(keyH::handle);
         this.setOnKeyReleased(keyH::handle);
 
-        // Mouse movement listener to update gun angle
-        this.setOnMouseMoved(this::handleMouseMovement);
-        this.setOnMouseClicked(event -> {
-            player.handleMouseClick(event);
-        });
+        // Initialize gun
+        gun = new Gun(player, 50); // Gun is 50 pixels away from the player
+
+        // Add mouse handlers
+        setupMouseHandlers();
 
         startGameThread();
-    }
-
-    private void handleMouseMovement(javafx.scene.input.MouseEvent mouseEvent) {
-        double mouseX = mouseEvent.getSceneX();  // Get mouse X position
-        double mouseY = mouseEvent.getSceneY();  // Get mouse Y position
-
-        // Pass the mouse coordinates to the player to update the gun angle and position
-        player.updateGunPosition(mouseX, mouseY);
-    }
-
-
-    // Process mouse input and send the game action (if multiplayer)
-    private void processMouseInput(int mouseX, int mouseY) {
-        // Example: Send shooting action to server (optional)
-        GameAction action = new GameAction("shoot", mouseX, mouseY, true);
-        if (client != null) {
-            client.sendGameAction(action);
-        }
     }
 
     public int getMaxWorldCol() {
@@ -102,11 +93,27 @@ public class GamePanel extends Canvas {
         gameLoop.start();
     }
 
+    public void setupMouseHandlers() {
+        // Update gun rotation with mouse movement
+        this.setOnMouseMoved((MouseEvent event) -> {
+            mouseX = event.getX();
+            mouseY = event.getY();
+            gun.updatePosition(mouseX, mouseY);
+        });
+
+        // Shoot bullets when mouse is clicked
+        this.setOnMouseClicked((MouseEvent event) -> {
+            bullets.add(new Bullet(gun.getX(), gun.getY(), gun.getAngle()));
+        });
+    }
+
     public void update(double deltaTime) {
         tileM.updateCar();
         player.update();
+        gun.updatePosition(mouseX, mouseY); // Update gun rotation
+        bullets.forEach(bullet -> bullet.update(deltaTime)); // Update bullets
+        bullets.removeIf(bullet -> bullet.isOutOfBounds(screenWidth, screenHeight)); // Remove out-of-bounds bullets
         updateCamera();
-        player.updateBullets();
     }
 
     public void updateCamera() {
@@ -125,7 +132,8 @@ public class GamePanel extends Canvas {
 
         tileM.draw(gc);
         player.draw(gc);
-        player.drawBullets(gc);
+        gun.draw(gc); // Draw the gun
+        bullets.forEach(bullet -> bullet.draw(gc)); // Draw all bullets
     }
 
     public void resizeCanvas(double newWidth, double newHeight) {
