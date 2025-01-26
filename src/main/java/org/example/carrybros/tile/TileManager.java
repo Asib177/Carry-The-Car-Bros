@@ -32,7 +32,6 @@ public class TileManager {
 
         mapTileNum = new int[gp.getMaxWorldCol()][gp.getMaxWorldRow()];
 
-        //loadMap("/map/myMap01.txt");
        loadMap("/map/myMap02.txt");
         getTileImage();
         initializeCar();
@@ -127,6 +126,18 @@ public class TileManager {
 
             tile[13] = new Tile();
             tile[13].image = new Image(getClass().getResourceAsStream("/road/secondCorner_up.png"));
+
+            tile[14] = new Tile();
+            tile[14].image = new Image(getClass().getResourceAsStream("/miniGround/bg_up_left.png"));
+
+            tile[15] = new Tile();
+            tile[15].image = new Image(getClass().getResourceAsStream("/miniGround/bg_up_right.png"));
+
+            tile[16] = new Tile();
+            tile[16].image = new Image(getClass().getResourceAsStream("/miniGround/bg_down_left.png"));
+
+            tile[17] = new Tile();
+            tile[17].image = new Image(getClass().getResourceAsStream("/miniGround/bg_down_right.png"));
 
         } catch (Exception e) {
             e.printStackTrace();

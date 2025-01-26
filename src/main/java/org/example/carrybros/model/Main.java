@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
 
         primaryStage.setTitle("Carry The Car - Game");
-        primaryStage.getIcons().add(new Image(getClass().getResource("/images/Icon.png").toString()));
+        primaryStage.getIcons().add(new Image(getClass().getResource("/images/gun.png").toString()));
 
         GamePanel gamePanel = new GamePanel();
         Group root = new Group(gamePanel);

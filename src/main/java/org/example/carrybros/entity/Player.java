@@ -10,7 +10,7 @@ public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyH;
 
-    private Image gunImage;
+    private Image gunImage, counerHouse;
     private final double gunDistance = 50;
 
     public Player(GamePanel gp, KeyHandler keyH) {
@@ -41,6 +41,7 @@ public class Player extends Entity {
         right1 = new Image(getClass().getResourceAsStream("/player/boy_right_1.png"));
         right2 = new Image(getClass().getResourceAsStream("/player/boy_right_2.png"));
         gunImage = new Image(getClass().getResourceAsStream("/images/NewGun.png"));
+//        counerHouse = new Image(getClass().getResourceAsStream("/house/Couner Housee.png"));
     }
 
 
@@ -85,8 +86,6 @@ public class Player extends Entity {
         updateGunPosition(gp.mouseX, gp.mouseY); // Update the gun position and angle
     }
 
-
-
     private void updateGunPosition(double mouseX, double mouseY) {
         // Calculate angle towards the mouse cursor
         gunAngle = Math.atan2(mouseY - screenY - gp.tileSize / 2, mouseX - screenX - gp.tileSize / 2);
@@ -116,15 +115,6 @@ public class Player extends Entity {
         if (playerImage != null) {
             gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
         }
-
-//        // Draw gun
-//        if (gunImage != null) {
-//            gc.save();
-//            gc.translate(gunX, gunY);
-//            gc.rotate(Math.toDegrees(gunAngle));
-//            gc.drawImage(gunImage, -gp.tileSize / 4, -gp.tileSize / 4, gp.tileSize / 2, gp.tileSize / 2);
-//            gc.restore();
-//        }
 
         drawGun(gc);
     }
