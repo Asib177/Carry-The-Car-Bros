@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.animation.AnimationTimer;
 import org.example.carrybros.entity.Bullet;
 import org.example.carrybros.entity.Player;
+import org.example.carrybros.village.Village;
 import org.example.carrybros.tile.TileManager;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class GamePanel extends Canvas {
     public KeyHandler keyH = new KeyHandler();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyH);
+    public Village house = new Village(this, keyH);
 
     private List<Bullet> bullets = new ArrayList<>();
     public double mouseX;
@@ -116,6 +118,7 @@ public class GamePanel extends Canvas {
         gc.fillRect(0, 0, screenWidth, screenHeight);
 
         tileM.draw(gc);
+        house.draw(gc);
         player.draw(gc);
         bullets.forEach(bullet -> bullet.draw(gc)); // Draw all bullets
     }

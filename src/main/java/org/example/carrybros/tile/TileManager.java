@@ -22,7 +22,7 @@ public class TileManager {
     public String carDirection;
     public boolean carMoving;
     public int[][] path;
-    public Image carUp, carDown, carLeft, carRight;
+    public Image carUp, carDown, carLeft, carRight, cornerHouse, horizontalHouse, verticalHouse;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
@@ -138,6 +138,12 @@ public class TileManager {
 
             tile[17] = new Tile();
             tile[17].image = new Image(getClass().getResourceAsStream("/miniGround/bg_down_right.png"));
+
+            tile[18] = new Tile();
+            tile[18].image = new Image(getClass().getResourceAsStream("/road/Start Point.png"));
+
+            tile[19] = new Tile();
+            tile[19].image = new Image(getClass().getResourceAsStream("/road/End Point.png"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -267,7 +273,7 @@ public class TileManager {
         };
 
         if (carImage != null) {
-            int carSize = gp.getTileSize();
+            int carSize = (int) (gp.getTileSize() * 1.5);
             gc.drawImage(carImage, carX - gp.cameraX - carSize / 2, carY - gp.cameraY - carSize / 2, carSize, carSize);
         }
     }
