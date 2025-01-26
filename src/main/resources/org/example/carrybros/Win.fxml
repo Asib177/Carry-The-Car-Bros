@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.carrybros.frontendByMuktadir.Win">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.carrybros.model.winController">
    <children>
       <Pane layoutX="10.0" layoutY="10.0" prefHeight="582.0" prefWidth="753.0">
          <children>
@@ -21,12 +21,12 @@
                   <Font name="Agency FB Bold" size="40.0" />
                </font>
             </Label>
-            <Button layoutX="454.0" layoutY="447.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Quit">
+            <Button fx:id="quitButton" layoutX="454.0" layoutY="447.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Quit">
                <font>
                   <Font name="Agency FB" size="24.0" />
                </font>
             </Button>
-            <Button layoutX="312.0" layoutY="447.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Play Again">
+            <Button fx:id="playAgainButton" layoutX="312.0" layoutY="447.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Play Again">
                <font>
                   <Font name="Agency FB" size="24.0" />
                </font>
@@ -41,7 +41,7 @@
                   <Font name="Agency FB Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="426.0" layoutY="291.0" prefHeight="49.0" prefWidth="55.0" text="70">
+            <Label fx:id="scoreLabel" layoutX="426.0" layoutY="291.0" prefHeight="49.0" prefWidth="55.0" text="70">
                <font>
                   <Font name="Agency FB Bold" size="18.0" />
                </font>
@@ -56,7 +56,7 @@
                   <Font name="Agency FB Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="426.0" layoutY="340.0" prefHeight="49.0" prefWidth="55.0" text="7">
+            <Label fx:id="killedLabel" layoutX="426.0" layoutY="340.0" prefHeight="49.0" prefWidth="55.0" text="7">
                <font>
                   <Font name="Agency FB Bold" size="18.0" />
                </font>
@@ -71,7 +71,7 @@
                   <Font name="Agency FB Bold" size="18.0" />
                </font>
             </Label>
-            <Label layoutX="426.0" layoutY="383.0" prefHeight="49.0" prefWidth="55.0" text="7">
+            <Label fx:id="regeneratedLabel" layoutX="426.0" layoutY="383.0" prefHeight="49.0" prefWidth="55.0" text="7">
                <font>
                   <Font name="Agency FB Bold" size="18.0" />
                </font>
