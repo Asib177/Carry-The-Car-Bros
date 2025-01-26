@@ -5,6 +5,9 @@ import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import org.example.carrybros.model.GamePanel;
 import org.example.carrybros.model.KeyHandler;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle; // Add this import
 
 public class Player extends Entity {
     GamePanel gp;
@@ -14,6 +17,9 @@ public class Player extends Entity {
     private final double gunDistance = 50;
 
     public Player(GamePanel gp, KeyHandler keyH) {
+//        if (keyH == null) {
+//            throw new IllegalArgumentException("KeyHandler (keyH) cannot be null!");
+//        }
         this.gp = gp;
         this.keyH = keyH;
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
@@ -45,8 +51,12 @@ public class Player extends Entity {
 
 
     public void update() {
-        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
+        if (keyH == null) {
+            System.err.println("keyH is null in update method!");
+            return; // Exit to avoid NullPointerException
+        }
 
+        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
             if (keyH.upPressed) {
                 direction = "up";
                 gp.cChecker.checkTile(this);
@@ -81,11 +91,21 @@ public class Player extends Entity {
                 spriteNum = (spriteNum == 1) ? 2 : 1;
                 spriteCounter = 0;
             }
+
+            // Send updated position to the server
+            String message = "Player position: (" + playerXposition + ", " + playerYposition + ")";
+            gp.gameClient.sendMessage(message); // Use the sendMessage method
         }
+
         updateGunPosition(gp.mouseX, gp.mouseY); // Update the gun position and angle
     }
 
-
+    public boolean isNearCar() {
+        double dx = playerXposition - gp.tileM.carX;
+        double dy = playerYposition - gp.tileM.carY;
+        double distance = Math.sqrt(dx * dx + dy * dy);
+        return distance <= gp.tileM.carRadius;
+    }
 
     private void updateGunPosition(double mouseX, double mouseY) {
         // Calculate angle towards the mouse cursor
@@ -116,16 +136,6 @@ public class Player extends Entity {
         if (playerImage != null) {
             gc.drawImage(playerImage, screenX, screenY, gp.tileSize, gp.tileSize);
         }
-
-//        // Draw gun
-//        if (gunImage != null) {
-//            gc.save();
-//            gc.translate(gunX, gunY);
-//            gc.rotate(Math.toDegrees(gunAngle));
-//            gc.drawImage(gunImage, -gp.tileSize / 4, -gp.tileSize / 4, gp.tileSize / 2, gp.tileSize / 2);
-//            gc.restore();
-//        }
-
         drawGun(gc);
     }
 
@@ -148,4 +158,3 @@ public class Player extends Entity {
         gc.restore(); // Restore the canvas to its original state
     }
 }
-

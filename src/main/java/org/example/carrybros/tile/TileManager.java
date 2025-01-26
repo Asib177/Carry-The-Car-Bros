@@ -4,6 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import org.example.carrybros.entity.Player;
 import org.example.carrybros.model.GamePanel;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -170,16 +172,30 @@ public class TileManager {
 
 
     public boolean isPlayerNearCar() {
-        float dx = gp.player.playerXposition - carX;
-        float dy = gp.player.playerYposition - carY;
+        float dx = gp.player1.playerXposition - carX;
+        float dy = gp.player1.playerYposition - carY;
         double distance = Math.sqrt(dx * dx + dy * dy);
         return distance <= carRadius;
     }
 
+
     public void updateCar() {
-        if (isPlayerNearCar()) {
+        boolean player1NearCar = gp.player1.isNearCar();
+        boolean player2NearCar = gp.player2.isNearCar();
+
+        if (player1NearCar && !player2NearCar) {
+            // Only Player 1 is near the car: move forward
             carMoving = true;
+            carDirection = "FORWARD";
+        } else if (!player1NearCar && player2NearCar) {
+            // Only Player 2 is near the car: move backward
+            carMoving = true;
+            carDirection = "BACKWARD";
+        } else if (player1NearCar && player2NearCar) {
+            // Both players are near the car: stop
+            carMoving = false;
         } else {
+            // No players are near the car: stop
             carMoving = false;
         }
 
@@ -187,30 +203,54 @@ public class TileManager {
             int targetX = path[pathIndex][0] + gp.getTileSize() / 2;
             int targetY = path[pathIndex][1] + gp.getTileSize() / 2;
 
-            if (carX < targetX) {
-                carX += carSpeed;
-                carDirection = "RIGHT";
-            } else if (carX > targetX) {
-                carX -= carSpeed;
-                carDirection = "LEFT";
-            }
+            if (carDirection.equals("FORWARD")) {
+                // Move forward along the path
+                if (carX < targetX) {
+                    carX += carSpeed;
+                } else if (carX > targetX) {
+                    carX -= carSpeed;
+                }
 
-            if (carY < targetY) {
-                carY += carSpeed;
-                carDirection = "DOWN";
-            } else if (carY > targetY) {
-                carY -= carSpeed;
-                carDirection = "UP";
-            }
+                if (carY < targetY) {
+                    carY += carSpeed;
+                } else if (carY > targetY) {
+                    carY -= carSpeed;
+                }
 
-            if (Math.abs(carX - targetX) < carSpeed && Math.abs(carY - targetY) < carSpeed) {
-                carX = targetX;
-                carY = targetY;
-                pathIndex++;
-                if (pathIndex >= path.length) {
-                    pathIndex = 0;
+                if (Math.abs(carX - targetX) < carSpeed && Math.abs(carY - targetY) < carSpeed) {
+                    carX = targetX;
+                    carY = targetY;
+                    pathIndex++;
+                    if (pathIndex >= path.length) {
+                        pathIndex = 0; // Loop back to the start of the path
+                    }
+                }
+            } else if (carDirection.equals("BACKWARD")) {
+                // Move backward along the path
+                if (carX < targetX) {
+                    carX -= carSpeed;
+                } else if (carX > targetX) {
+                    carX += carSpeed;
+                }
+
+                if (carY < targetY) {
+                    carY -= carSpeed;
+                } else if (carY > targetY) {
+                    carY += carSpeed;
+                }
+
+                if (Math.abs(carX - targetX) < carSpeed && Math.abs(carY - targetY) < carSpeed) {
+                    carX = targetX;
+                    carY = targetY;
+                    pathIndex--;
+                    if (pathIndex < 0) {
+                        pathIndex = path.length - 1; // Loop back to the end of the path
+                    }
                 }
             }
+
+            // Broadcast the updated car state to all clients
+            gp.gameClient.sendMessage("Car position: (" + carX + ", " + carY + ", " + carDirection + ")");
         }
     }
 
