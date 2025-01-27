@@ -1,12 +1,17 @@
 package org.example.carrybros.model;
-
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import org.example.carrybros.HelloApplication;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import org.example.carrybros.database.DBConnection;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,23 +28,52 @@ public class LoginController {
     private Button loginButton;
 
     @FXML
-    void handleLoginButtonAction(ActionEvent event) {
-        String username = usernameField.getText().trim();
-        String password = passwordField.getText().trim();
+    private Button signupButton;
 
-        // Perform validation
-        if (username.isEmpty() || password.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Validation Error", "Username and password cannot be empty.");
-            return;
-        }
+    @FXML
+    public void initialize(){
+        signupButton.setOnAction(event -> {
+            try {
+                signup();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
-        // Check credentials in the database
-        if (authenticate(username, password)) {
-            showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
-            // Navigate to the next screen or main menu if needed
-        } else {
-            showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
-        }
+
+        loginButton.setOnAction(actionEvent -> {
+            String username = usernameField.getText().trim();
+            String password = passwordField.getText();
+            if (username.isEmpty() || password.isEmpty()) {
+                System.out.println("All fields must be filled!");
+                return;
+            }
+            boolean result = authenticate(username, password);
+            if(result){
+                try {
+                    Options();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            else{
+                usernameField.setText("");
+                passwordField.setText("");
+            }
+        });
+    }
+
+    public void signup() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("signup.fxml"));
+        Parent root = fxmlLoader.load();
+
+
+        Stage stage = (Stage) signupButton.getScene().getWindow();
+
+
+        stage.setScene(new Scene(root, 740, 740));
+        stage.setTitle("Signup");
+        stage.show();
     }
 
     private boolean authenticate(String username, String password) {
@@ -49,8 +83,8 @@ public class LoginController {
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             // Set parameters
-            preparedStatement.setString(2, username);
-            preparedStatement.setString(5, password);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
 
             // Execute query
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -64,6 +98,19 @@ public class LoginController {
         }
 
         return false;
+    }
+
+    private void Options() throws IOException, NullPointerException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("options.fxml"));
+        Parent root = fxmlLoader.load();
+
+
+        Stage stage = (Stage) loginButton.getScene().getWindow();
+
+
+        stage.setScene(new Scene(root, 740, 740));
+        stage.setTitle("Options");
+        stage.show();
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {

@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.carrybros.model.OptionsController">
    <children>
       <Pane prefHeight="596.0" prefWidth="754.0">
@@ -27,6 +26,11 @@
                </font>
             </Button>
             <Button fx:id="controlsButton" layoutX="292.0" layoutY="364.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="170.0" text="Controls">
+               <font>
+                  <Font name="Agency FB" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="quitButton1" layoutX="586.0" layoutY="168.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Log Out">
                <font>
                   <Font name="Agency FB" size="18.0" />
                </font>

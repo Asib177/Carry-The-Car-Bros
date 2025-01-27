@@ -1,8 +1,14 @@
 package org.example.carrybros.model;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;  // Replace with the actual path to your Main class (or relevant class)
+import org.example.carrybros.HelloApplication;
+
+import java.io.IOException;
 
 public class OptionsController {
 
@@ -22,27 +28,37 @@ public class OptionsController {
         playButton.setOnAction(e -> startGame());
 
         // Set action for High Score Button
-        highScoreButton.setOnAction(e -> viewHighScores());
+        highScoreButton.setOnAction(e -> {
+            try {
+                viewHighScores();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
-        // Set action for Controls Button
         controlsButton.setOnAction(e -> viewControls());
     }
 
-    // Start the game (add game logic here or navigate to a new screen)
     private void startGame() {
         System.out.println("Game Started");
-        // For example, you could change scenes or navigate to the game screen
+
     }
 
-    // Navigate to high score page
-    private void viewHighScores() {
+    private void viewHighScores() throws IOException {
         System.out.println("Viewing High Scores");
-        // You can switch to a high score page here
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("options.fxml"));
+        Parent root = fxmlLoader.load();
+
+
+        Stage stage = (Stage) highScoreButton.getScene().getWindow();
+
+
+        stage.setScene(new Scene(root, 740, 740));
+        stage.setTitle("Options");
+        stage.show();
     }
 
-    // Navigate to controls page
     private void viewControls() {
         System.out.println("Viewing Controls");
-        // You can switch to a controls page here
     }
 }

@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="$CONTROLLER_NAME$">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.carrybros.model.joinController">
    <children>
       <Pane prefHeight="582.0" prefWidth="753.0">
          <children>
@@ -17,18 +16,23 @@
                   <Font name="Baskerville Old Face" size="64.0" />
                </font>
             </Label>
-            <TextField layoutX="261.0" layoutY="277.0" prefHeight="35.0" prefWidth="217.0" />
+            <TextField fx:id="ipAddressField" layoutX="261.0" layoutY="277.0" prefHeight="35.0" prefWidth="217.0" />
             <Label layoutX="262.0" layoutY="235.0" prefHeight="29.0" prefWidth="137.0" text="Your IP Address">
                <font>
                   <Font name="Agency FB Bold" size="24.0" />
                </font>
             </Label>
-            <Button layoutX="413.0" layoutY="326.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="80.0" text="Join">
+            <Button fx:id="joinButton" layoutX="413.0" layoutY="326.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="80.0" text="Join">
                <font>
                   <Font name="Agency FB" size="24.0" />
                </font>
             </Button>
          </children>
       </Pane>
+      <Button fx:id="logOut" onAction="handleLogout" layoutX="589.0" layoutY="182.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Log Out">
+         <font>
+            <Font name="Agency FB" size="18.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

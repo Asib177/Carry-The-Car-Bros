@@ -1,12 +1,20 @@
 package org.example.carrybros.model;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
+import org.example.carrybros.HelloApplication;
 import org.example.carrybros.database.DBConnection;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -23,6 +31,22 @@ public class SignupController {
     private PasswordField passwordField;
 
     @FXML
+    private Button loginInstead;
+
+    @FXML
+    private Button signupButton;
+
+    @FXML
+    public void handleLogin(ActionEvent event){
+        try {
+            login();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @FXML
     private void handleSignup() {
         String username = usernameField.getText().trim();
         String fullName = fullnameField.getText().trim();
@@ -30,19 +54,24 @@ public class SignupController {
         int score = 0;
 
         if (username.isEmpty() || fullName.isEmpty() || password.isEmpty()) {
-            showAlert("Error", "All fields must be filled!", AlertType.ERROR);
+            System.out.println("All fields must be filled!");
             return;
         }
 
         if (insertIntoDatabase(username, fullName, score, password)) {
-            showAlert("Success", "Signup successful for user: " + username, AlertType.INFORMATION);
+            System.out.println("Insertion Visited!!!!!!!!!");
+                try {
+                    Options();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
         } else {
-            showAlert("Error", "Signup failed! Username might already exist.", AlertType.ERROR);
+            System.out.println("Problem occured!!!!!!");
         }
     }
 
     private boolean insertIntoDatabase(String username, String fullName, int score, String password) {
-        String query = "INSERT INTO player (username, fullname, score, userPassword) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO player (username, fullName, score, userPassword) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -59,12 +88,32 @@ public class SignupController {
             e.printStackTrace();
             return false;
         }
+
+    }
+    private void Options() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("options.fxml"));
+        Parent root = fxmlLoader.load();
+
+
+        Stage stage = (Stage) signupButton.getScene().getWindow();
+
+
+        stage.setScene(new Scene(root, 740, 740));
+        stage.setTitle("Options");
+        stage.show();
     }
 
-    private void showAlert(String title, String content, AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setContentText(content);
-        alert.showAndWait();
+    private void login() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
+        Parent root = fxmlLoader.load();
+
+
+        Stage stage = (Stage) loginInstead.getScene().getWindow();
+
+
+        stage.setScene(new Scene(root, 740, 740));
+        stage.setTitle("Login");
+        stage.show();
     }
+
 }

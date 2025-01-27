@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.carrybros.model.winController">
    <children>
       <Pane layoutX="10.0" layoutY="10.0" prefHeight="582.0" prefWidth="753.0">
@@ -21,14 +20,14 @@
                   <Font name="Agency FB Bold" size="40.0" />
                </font>
             </Label>
-            <Button fx:id="quitButton" layoutX="454.0" layoutY="447.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Quit">
+            <Button fx:id="quitButton" layoutX="456.0" layoutY="461.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Quit">
                <font>
-                  <Font name="Agency FB" size="24.0" />
+                  <Font name="Agency FB" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="playAgainButton" layoutX="312.0" layoutY="447.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Play Again">
+            <Button fx:id="playAgainButton" layoutX="314.0" layoutY="461.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Play Again">
                <font>
-                  <Font name="Agency FB" size="24.0" />
+                  <Font name="Agency FB" size="18.0" />
                </font>
             </Button>
             <Label layoutX="301.0" layoutY="291.0" prefHeight="49.0" prefWidth="55.0" text="Score">
@@ -76,6 +75,11 @@
                   <Font name="Agency FB Bold" size="18.0" />
                </font>
             </Label>
+            <Button fx:id="quitButton1" layoutX="579.0" layoutY="172.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Log Out">
+               <font>
+                  <Font name="Agency FB" size="18.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
    </children>
