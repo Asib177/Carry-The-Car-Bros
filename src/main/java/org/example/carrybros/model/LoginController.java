@@ -76,7 +76,7 @@ public class LoginController {
         stage.show();
     }
 
-    private boolean authenticate(String username, String password) {
+    public boolean authenticate(String username, String password) {
         String query = "SELECT * FROM player WHERE username = ? AND userPassword = ?";
 
         try (Connection connection = DBConnection.getConnection();
@@ -87,14 +87,12 @@ public class LoginController {
             preparedStatement.setString(2, password);
 
             // Execute query
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            // Check if a record exists
-            return resultSet.next();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return resultSet.next(); // Check if a record exists
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Database Error", "An error occurred while connecting to the database.");
         }
 
         return false;
@@ -111,12 +109,5 @@ public class LoginController {
         stage.setScene(new Scene(root, 740, 740));
         stage.setTitle("Options");
         stage.show();
-    }
-
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

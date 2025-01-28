@@ -30,7 +30,7 @@
                   <Font name="Agency FB" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="quitButton1" layoutX="586.0" layoutY="168.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Log Out">
+            <Button fx:id="logoutButton" layoutX="586.0" layoutY="168.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Log Out">
                <font>
                   <Font name="Agency FB" size="18.0" />
                </font>

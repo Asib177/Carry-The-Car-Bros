@@ -91,7 +91,7 @@
                   <Font name="Agency FB Bold" size="25.0" />
                </font>
             </Label>
-            <Button fx:id="playAgainButton" layoutX="425.0" layoutY="483.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Options">
+            <Button fx:id="optionsButton" layoutX="425.0" layoutY="483.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Options">
                <font>
                   <Font name="Agency FB" size="24.0" />
                </font>

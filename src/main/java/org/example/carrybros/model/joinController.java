@@ -2,10 +2,15 @@ package org.example.carrybros.model;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import org.example.carrybros.model.Logout;
+import javafx.stage.Stage;
+import org.example.carrybros.HelloApplication;
+
+import java.io.IOException;
 
 public class joinController {
 
@@ -16,42 +21,50 @@ public class joinController {
     private Button joinButton;
 
     @FXML
-    private Button quitButton1;
+    private Button logOut;
 
     @FXML
     public void initialize() {
-        joinButton.setOnAction(event -> handleJoinButton());
-        quitButton1.setOnAction(event -> handleLogout());
+        joinButton.setOnAction(event -> {
+            try {
+                handleJoinButton();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        logOut.setOnAction(event -> {
+            try {
+                handleLogout();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        joinButton.setOnAction(ActionEvent ->{
+            //handleJoinButton();
+        });
     }
 
-    private void handleJoinButton() {
-        String ipAddress = ipAddressField.getText().trim();
-
-        if (ipAddress.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Validation Error", "IP Address cannot be empty.");
-            return;
-        }
-
+    private void handleJoinButton() throws IOException{
 
     }
 
-    private boolean isValidIPAddress(String ipAddress) {
-        // A simple regex for IP address validation
-        String ipPattern = "";
-        return ipAddress.matches(ipPattern);
+
+
+
+
+    private void handleLogout() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
+        Parent root = fxmlLoader.load();
+
+
+        Stage stage = (Stage) logOut.getScene().getWindow();
+
+
+        stage.setScene(new Scene(root, 740, 740));
+        stage.setTitle("Login");
+        stage.show();
+
     }
 
 
-
-    
-    private void handleLogout() {
-        Logout.main();
-    }
-
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

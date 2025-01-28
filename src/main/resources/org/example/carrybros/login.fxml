@@ -16,13 +16,13 @@
                   <Font name="Baskerville Old Face" size="64.0" />
                </font>
             </Label>
-            <TextField layoutX="268.0" layoutY="250.0" prefHeight="35.0" prefWidth="217.0" />
+            <TextField fx:id="usernameField" layoutX="268.0" layoutY="250.0" prefHeight="35.0" prefWidth="217.0" />
             <Label layoutX="268.0" layoutY="219.0" prefHeight="29.0" prefWidth="94.0" text="User Name">
                <font>
                   <Font name="Agency FB Bold" size="24.0" />
                </font>
             </Label>
-            <TextField layoutX="268.0" layoutY="333.0" prefHeight="35.0" prefWidth="217.0" />
+            <TextField fx:id="passwordField" layoutX="268.0" layoutY="333.0" prefHeight="35.0" prefWidth="217.0" />
             <Label layoutX="268.0" layoutY="302.0" prefHeight="29.0" prefWidth="87.0" text="Password">
                <font>
                   <Font name="Agency FB Bold" size="24.0" />

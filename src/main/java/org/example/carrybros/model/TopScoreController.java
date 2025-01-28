@@ -2,12 +2,20 @@ package org.example.carrybros.model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import org.example.carrybros.HelloApplication;
 import org.example.carrybros.database.DBConnection;
 
+import java.io.IOException;
 import java.sql.*;
 
 public class TopScoreController {
@@ -24,6 +32,12 @@ public class TopScoreController {
     private ObservableList<Score> scores;
 
     @FXML
+    private Button optionsButton;
+
+    @FXML
+    private Button logoutButton;
+
+    @FXML
     public void initialize() {
         // Set up the columns
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
@@ -33,6 +47,24 @@ public class TopScoreController {
         scores = FXCollections.observableArrayList();
         fetchTopScores();
         scoresTable.setItems(scores);
+
+        optionsButton.setOnAction(ActionEvent ->{
+            try {
+                options();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        logoutButton.setOnAction(ActionEvent->{
+            try {
+                logout();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+
     }
 
     // Method to fetch top 5 scores from the database
@@ -70,5 +102,30 @@ public class TopScoreController {
         public int getScore() {
             return score;
         }
+    }
+
+    private void options() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("options.fxml"));
+        Parent root = fxmlLoader.load();
+
+
+        Stage stage = (Stage) optionsButton.getScene().getWindow();
+
+
+        stage.setScene(new Scene(root, 740, 740));
+        stage.setTitle("Options");
+        stage.show();
+    }
+    private void logout() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
+        Parent root = fxmlLoader.load();
+
+
+        Stage stage = (Stage) logoutButton.getScene().getWindow();
+
+
+        stage.setScene(new Scene(root, 740, 740));
+        stage.setTitle("Options");
+        stage.show();
     }
 }

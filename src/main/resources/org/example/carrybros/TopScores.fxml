@@ -23,12 +23,12 @@
                         <TableColumn fx:id="scoreColumn" prefWidth="209.60003662109375" text="Score" />
                     </columns>
                 </TableView>
-            <Button layoutX="477.0" layoutY="506.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="100.0" text="Options">
+            <Button fx:id="optionsButton" layoutX="477.0" layoutY="506.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="100.0" text="Options">
                <font>
                   <Font name="Agency FB" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="quitButton1" layoutX="599.0" layoutY="156.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Log Out">
+            <Button fx:id="logoutButton" layoutX="599.0" layoutY="156.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="113.0" text="Log Out">
                <font>
                   <Font name="Agency FB" size="18.0" />
                </font>
